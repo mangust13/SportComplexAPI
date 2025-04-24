@@ -12,5 +12,6 @@ namespace SportComplexAPI.Models
 
         public ICollection<Client> Clients { get; set; }
         public ICollection<Trainer> Trainers { get; set; }
+        
     }
 }

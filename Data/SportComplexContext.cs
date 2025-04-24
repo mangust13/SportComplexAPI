@@ -14,5 +14,7 @@ namespace SportComplexAPI.Data
 
         public DbSet<Client> Clients { get; set; } = null!;
         public DbSet<Gender> Genders { get; set; } = null!;
+        public DbSet<User> Users { get; set; } = null!;
+        public DbSet<UserRole> UserRoles {  get; set; } = null!;
     }
 }

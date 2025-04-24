@@ -89,3 +89,4 @@ D:\Univer\Sem_06\BDCourse\SportComplexAPI\obj\Debug\net8.0\SportComplexAPI.pdb
 D:\Univer\Sem_06\BDCourse\SportComplexAPI\obj\Debug\net8.0\SportComplexAPI.genruntimeconfig.cache
 D:\Univer\Sem_06\BDCourse\SportComplexAPI\obj\Debug\net8.0\ref\SportComplexAPI.dll
 D:\Univer\Sem_06\BDCourse\SportComplexAPI\bin\Debug\net8.0\AutoMapper.dll
+D:\Univer\Sem_06\BDCourse\SportComplexAPI\obj\Debug\net8.0\SportComplexAPI.sourcelink.json
