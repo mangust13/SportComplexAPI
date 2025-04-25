@@ -50,5 +50,21 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.PurchaseController",
+    "Method": "GetPurchasesForInternalManager",
+    "RelativePath": "api/Purchase/manager-view",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "searchTerm",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
   }
 ]

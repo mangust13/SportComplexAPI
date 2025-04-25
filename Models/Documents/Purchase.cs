@@ -10,6 +10,8 @@ namespace SportComplexAPI.Models
 
         [ForeignKey("Client")]
         public int client_id { get; set; }
+        public Client Client { get; set; }
+
 
         [ForeignKey("Subscription")]
         public int subscription_id { get; set; }
@@ -21,7 +23,6 @@ namespace SportComplexAPI.Models
 
         public DateTime purchase_date { get; set; }
 
-        public Client Client { get; set; }
         public Subscription Subscription { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
     }
