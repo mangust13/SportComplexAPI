@@ -13,5 +13,8 @@ namespace SportComplexAPI.Models
         [ForeignKey("SportComplex")]
         public int sport_complex_id { get; set; }
         public SportComplex SportComplex { get; set; }
+        public int gym_number {  get; set; }
+        public int gym_capacity { get; set; }
+
     }
 }

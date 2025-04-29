@@ -18,6 +18,5 @@ namespace SportComplexAPI.Models
 
         public BaseSubscription BaseSubscription { get; set; }
         public ICollection<SubscriptionActivity> SubscriptionActivities { get; set; }
-        public ICollection<Purchase> Purchases { get; set; }
     }
 }

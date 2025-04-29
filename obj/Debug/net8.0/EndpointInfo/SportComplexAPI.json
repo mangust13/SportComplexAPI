@@ -5,6 +5,18 @@
     "version": "1.0"
   },
   "paths": {
+    "/api/AttendanceRecord/attendance-record-view": {
+      "get": {
+        "tags": [
+          "AttendanceRecord"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Auth/login": {
       "post": {
         "tags": [
@@ -67,48 +79,31 @@
         }
       }
     },
-    "/api/Clients": {
+    "/api/Purchase/purchases-view": {
       "get": {
         "tags": [
-          "Clients"
+          "Purchase"
+        ],
+        "parameters": [
+          {
+            "name": "searchTerm",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ClientDTO"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ClientDTO"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ClientDTO"
-                  }
-                }
-              }
-            }
+            "description": "OK"
           }
         }
       }
     },
-    "/api/Purchase/manager-view": {
+    "/api/Subscriptions/subscriptions-view": {
       "get": {
         "tags": [
-          "Purchase"
+          "Subscriptions"
         ],
         "parameters": [
           {
@@ -129,28 +124,6 @@
   },
   "components": {
     "schemas": {
-      "ClientDTO": {
-        "type": "object",
-        "properties": {
-          "clientId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "clientFullName": {
-            "type": "string",
-            "nullable": true
-          },
-          "gender": {
-            "type": "string",
-            "nullable": true
-          },
-          "clientPhoneNumber": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "LoginRequest": {
         "type": "object",
         "properties": {

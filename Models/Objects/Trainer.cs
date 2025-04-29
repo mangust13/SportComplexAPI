@@ -20,5 +20,7 @@ namespace SportComplexAPI.Models
         public string trainer_full_name { get; set; }
         [MaxLength(15)]
         public string client_phone_number { get; set; }
+
+        public ICollection<TrainerActivity> TrainerActivities { get; set; }
     }
 }

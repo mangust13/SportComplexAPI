@@ -16,7 +16,7 @@ namespace SportComplexAPI.Controllers
             _context = context;
         }
 
-        [HttpGet("manager-view")]
+        [HttpGet("purchases-view")]
         public async Task<IActionResult> GetPurchasesForInternalManager([FromQuery] string? searchTerm = null)
         {
             var query = _context.Purchases
