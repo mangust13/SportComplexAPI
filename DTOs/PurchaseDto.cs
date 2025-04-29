@@ -22,6 +22,6 @@ namespace SportComplexAPI.DTOs
         public string SubscriptionTerm { get; set; }
         public string SubscriptionVisitTime { get; set; }
 
-        public List<ActivityInfoDto> Activities { get; set; } = new();
+        public List<ActivityDto> Activities { get; set; } = new();
     }
 }

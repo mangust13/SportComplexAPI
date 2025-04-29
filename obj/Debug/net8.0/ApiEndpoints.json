@@ -1,5 +1,68 @@
 [
   {
+    "ContainingType": "SportComplexAPI.Controllers.ActivitiesController",
+    "Method": "GetAllActivities",
+    "RelativePath": "api/Activities",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.ActivitiesController",
+    "Method": "CreateActivity",
+    "RelativePath": "api/Activities",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "SportComplexAPI.DTOs.ActivityCreateUpdateDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.ActivitiesController",
+    "Method": "UpdateActivity",
+    "RelativePath": "api/Activities/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "SportComplexAPI.DTOs.ActivityCreateUpdateDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.ActivitiesController",
+    "Method": "DeleteActivity",
+    "RelativePath": "api/Activities/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "SportComplexAPI.Controllers.AttendanceRecordController",
     "Method": "GetAttendanceFullInfo",
     "RelativePath": "api/AttendanceRecord/attendance-record-view",
@@ -53,6 +116,22 @@
         "Name": "searchTerm",
         "Type": "System.String",
         "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.SubscriptionsController",
+    "Method": "CreateSubscription",
+    "RelativePath": "api/Subscriptions",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "SportComplexAPI.DTOs.SubscriptionDto",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []

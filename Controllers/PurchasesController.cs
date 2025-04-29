@@ -68,7 +68,7 @@ namespace SportComplexAPI.Controllers
                     SubscriptionVisitTime = p.Subscription.BaseSubscription.SubscriptionVisitTime.subscription_visit_time,
 
                     Activities = p.Subscription.SubscriptionActivities
-                        .Select(sa => new ActivityInfoDto
+                        .Select(sa => new ActivityDto
                         {
                             ActivityName = sa.Activity.activity_name,
                             ActivityPrice = sa.Activity.activity_price,

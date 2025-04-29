@@ -7,11 +7,11 @@ using SportComplexAPI.Models;
 
 namespace SportComplexAPI.DTOs
 {
-    public class ActivityDto
+    public class ActivityCreateUpdateDTO
     {
         public string ActivityName { get; set; } = null!;
         public decimal ActivityPrice { get; set; }
         public string? ActivityDescription { get; set; }
-        public int ActivityTypeAmount { get; set; }
     }
 }
+
