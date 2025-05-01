@@ -57,8 +57,7 @@ namespace SportComplexAPI.Controllers
                     p.Subscription.BaseSubscription.SubscriptionTerm.subscription_term.ToLower().Contains(search) ||
                     p.Subscription.BaseSubscription.SubscriptionVisitTime.subscription_visit_time.ToLower().Contains(search) ||
                     p.Subscription.SubscriptionActivities.Any(sa =>
-                        sa.Activity.activity_name.ToLower().Contains(search) ||
-                        sa.Activity.activity_description.ToLower().Contains(search)
+                        sa.Activity.activity_name.ToLower().Contains(search)
                     )
                 );
             }

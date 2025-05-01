@@ -17,34 +17,99 @@ namespace SportComplexAPI.Controllers
         }
 
         [HttpGet("subscriptions-view")]
-        public async Task<IActionResult> GetAllSubscriptions([FromQuery] string? searchTerm = null)
+        public async Task<IActionResult> GetAllSubscriptions(
+            string? search = null, string sortBy = "name",
+            string order = "asc", decimal? minCost = null,
+            decimal? maxCost = null, string? activities = null,
+            string? visitTime = null, string? term = null
+            )
         {
-            var subscriptions = await _context.Subscriptions
+            var query = _context.Subscriptions
                 .Include(s => s.BaseSubscription)
                     .ThenInclude(bs => bs.SubscriptionTerm)
                 .Include(s => s.BaseSubscription)
                     .ThenInclude(bs => bs.SubscriptionVisitTime)
                 .Include(s => s.SubscriptionActivities)
                     .ThenInclude(sa => sa.Activity)
-                .Select(s => new SubscriptionDto
+                .AsQueryable();
+
+            // Searching
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                search = search.ToLower();
+
+                query = query.Where(s => s.subscription_name.ToLower().Contains(search) ||
+                    s.subscription_total_cost.ToString().Contains(search) ||
+                    s.BaseSubscription.SubscriptionVisitTime.subscription_visit_time.Contains(search) ||
+                    s.BaseSubscription.SubscriptionTerm.subscription_term.Contains(search) ||
+                    s.SubscriptionActivities.Any(sa =>
+                        sa.Activity.activity_name.ToLower().Contains(search)
+                    )
+                );
+            }
+
+            // Sorting
+            query = (sortBy, order.ToLower()) switch
+            {
+
+                ("name", "asc") => query.OrderBy(s => s.subscription_name),
+                ("name", "desc") => query.OrderByDescending(s => s.subscription_name),
+                ("cost", "asc") => query.OrderBy(s => s.subscription_total_cost),
+                ("cost", "desc") => query.OrderByDescending(s => s.subscription_total_cost),
+                ("term", "asc") => query.OrderBy(s =>
+                    s.BaseSubscription.SubscriptionTerm.subscription_term == "1 місяць" ? 1 :
+                    s.BaseSubscription.SubscriptionTerm.subscription_term == "3 місяці" ? 3 :
+                    s.BaseSubscription.SubscriptionTerm.subscription_term == "6 місяців" ? 6 :
+                    s.BaseSubscription.SubscriptionTerm.subscription_term == "1 рік" ? 12 : 0),
+                ("term", "desc") => query.OrderByDescending(s =>
+                    s.BaseSubscription.SubscriptionTerm.subscription_term == "1 місяць" ? 1 :
+                    s.BaseSubscription.SubscriptionTerm.subscription_term == "3 місяці" ? 3 :
+                    s.BaseSubscription.SubscriptionTerm.subscription_term == "6 місяців" ? 6 :
+                    s.BaseSubscription.SubscriptionTerm.subscription_term == "1 рік" ? 12 : 0),
+                _ => query.OrderBy(s => s.subscription_name)
+            };
+
+            //Filtration    
+            if (minCost.HasValue)
+                query = query.Where(s => s.subscription_total_cost >= minCost.Value);
+
+            if (maxCost.HasValue)
+                query = query.Where(s => s.subscription_total_cost <= maxCost.Value);
+
+            if (!string.IsNullOrWhiteSpace(activities))
+            {
+                var activityList = activities.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(a => a.Trim().ToLower()).ToList();
+                query = query.Where(s => s.SubscriptionActivities.Any(sa => activityList.Contains(sa.Activity.activity_name.ToLower())));
+            }
+
+            if (!string.IsNullOrWhiteSpace(visitTime))
+            {
+                query = query.Where(s => s.BaseSubscription.SubscriptionVisitTime.subscription_visit_time == visitTime);
+            }
+
+            if (!string.IsNullOrWhiteSpace(term))
+            {
+                query = query.Where(s => s.BaseSubscription.SubscriptionTerm.subscription_term == term);
+            }
+            
+
+            var result = await query.Select(s => new SubscriptionDto
+            {
+                SubscriptionId = s.subscription_id,
+                SubscriptionName = s.subscription_name,
+                SubscriptionTotalCost = s.subscription_total_cost,
+                SubscriptionTerm = s.BaseSubscription.SubscriptionTerm.subscription_term,
+                SubscriptionVisitTime = s.BaseSubscription.SubscriptionVisitTime.subscription_visit_time,
+                Activities = s.SubscriptionActivities.Select(sa => new ActivityDto
                 {
-                    SubscriptionId = s.subscription_id,
-                    SubscriptionName = s.subscription_name,
-                    SubscriptionTotalCost = s.subscription_total_cost,
-                    SubscriptionTerm = s.BaseSubscription.SubscriptionTerm.subscription_term,
-                    SubscriptionVisitTime = s.BaseSubscription.SubscriptionVisitTime.subscription_visit_time,
-                    Activities = s.SubscriptionActivities
-                        .Select(sa => new ActivityDto
-                        {
-                            ActivityName = sa.Activity.activity_name,
-                            ActivityPrice = sa.Activity.activity_price,
-                            ActivityDescription = sa.Activity.activity_description,
-                            ActivityTypeAmount = sa.activity_type_amount
-                        })
-                        .ToList()
-                })
-                .ToListAsync();
-            return Ok(subscriptions);
+                    ActivityName = sa.Activity.activity_name,
+                    ActivityPrice = sa.Activity.activity_price,
+                    ActivityDescription = sa.Activity.activity_description,
+                    ActivityTypeAmount = sa.activity_type_amount
+                }).ToList()
+            }).ToListAsync();
+
+            return Ok(result);
             
         }
 
