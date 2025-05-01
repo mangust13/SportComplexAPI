@@ -106,14 +106,54 @@
   },
   {
     "ContainingType": "SportComplexAPI.Controllers.PurchaseController",
-    "Method": "GetPurchasesForInternalManager",
+    "Method": "GetPurchases",
     "RelativePath": "api/Purchase/purchases-view",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "searchTerm",
+        "Name": "search",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "sortBy",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "order",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "activities",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "paymentMethods",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "clientGender",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "minCost",
+        "Type": "System.Nullable\u00601[[System.Decimal, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "maxCost",
+        "Type": "System.Nullable\u00601[[System.Decimal, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "purchaseDate",
         "Type": "System.String",
         "IsRequired": false
       }
