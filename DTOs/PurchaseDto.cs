@@ -9,6 +9,7 @@ namespace SportComplexAPI.DTOs
 {
     public class PurchaseDto
     {
+        public int PurchaseId { get; set; }
         public int PurchaseNumber { get; set; }
         public DateTime PurchaseDate { get; set; }
         public string PaymentMethod { get; set; }

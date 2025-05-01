@@ -8,10 +8,10 @@ namespace SportComplexAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class PurchaseController : ControllerBase
+    public class PurchasesController : ControllerBase
     {
         private readonly SportComplexContext _context;
-        public PurchaseController(SportComplexContext context)
+        public PurchasesController(SportComplexContext context)
         {
             _context = context;
         }
@@ -133,6 +133,7 @@ namespace SportComplexAPI.Controllers
             var result = await query
                 .Select(p => new PurchaseDto
                 {
+                    PurchaseId = p.purchase_id,
                     PurchaseNumber = p.purchase_number,
                     PurchaseDate = p.purchase_date,
                     PaymentMethod = p.PaymentMethod.payment_method,
@@ -158,5 +159,60 @@ namespace SportComplexAPI.Controllers
             return Ok(result);
         }
 
+        public class PurchaseCreateDto
+        {
+            public int ClientId { get; set; }
+            public int SubscriptionId { get; set; }
+            public int PaymentMethodId { get; set; }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreatePurchase([FromBody] PurchaseCreateDto dto)
+        {
+            // Перевірки
+            var client = await _context.Clients.FindAsync(dto.ClientId);
+            if (client == null) return NotFound($"Клієнт з ID {dto.ClientId} не знайдений.");
+
+            var subscription = await _context.Subscriptions.FindAsync(dto.SubscriptionId);
+            if (subscription == null) return NotFound($"Абонемент з ID {dto.SubscriptionId} не знайдений.");
+
+            var paymentMethod = await _context.PaymentMethods.FindAsync(dto.PaymentMethodId);
+            if (paymentMethod == null) return NotFound($"Метод оплати з ID {dto.PaymentMethodId} не знайдений.");
+
+            var maxPurchaseNumber = await _context.Purchases.MaxAsync(p => (int?)p.purchase_number) ?? 1;
+            var nextPurchaseNumber = maxPurchaseNumber + 1;
+
+            // Створення покупки
+            var purchase = new Purchase
+            {
+                client_id = dto.ClientId,
+                subscription_id = dto.SubscriptionId,
+                payment_method_id = dto.PaymentMethodId,
+                purchase_date = DateTime.UtcNow,
+                purchase_number = nextPurchaseNumber,
+            };
+
+            _context.Purchases.Add(purchase);
+            await _context.SaveChangesAsync();
+
+            return Ok(new
+            {
+                Message = "Покупка успішно створена!",
+                PurchaseId = purchase.purchase_id
+            });
+        }
+
+        [HttpDelete("{purchaseId}")]
+        public async Task<IActionResult> DeletePurchase(int purchaseId)
+        {
+            var purchase = await _context.Purchases.FindAsync(purchaseId);
+            if (purchase == null)
+                return NotFound();
+
+            _context.Purchases.Remove(purchase);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { Message = $"Покупка з Id {purchaseId} видалена." });
+        }
     }
 }

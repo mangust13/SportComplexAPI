@@ -105,9 +105,67 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SportComplexAPI.Controllers.PurchaseController",
+    "ContainingType": "SportComplexAPI.Controllers.ClientsController",
+    "Method": "GetAllClients",
+    "RelativePath": "api/Clients",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.ClientsController",
+    "Method": "CreateClient",
+    "RelativePath": "api/Clients",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "SportComplexAPI.Controllers.ClientsController\u002BClientCreateDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.PurchasesController",
+    "Method": "CreatePurchase",
+    "RelativePath": "api/Purchases",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "SportComplexAPI.Controllers.PurchasesController\u002BPurchaseCreateDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.PurchasesController",
+    "Method": "DeletePurchase",
+    "RelativePath": "api/Purchases/{purchaseId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "purchaseId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.PurchasesController",
     "Method": "GetPurchases",
-    "RelativePath": "api/Purchase/purchases-view",
+    "RelativePath": "api/Purchases/purchases-view",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
