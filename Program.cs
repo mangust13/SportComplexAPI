@@ -11,7 +11,6 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<SportComplexContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 // ? CORS
 builder.Services.AddCors(options =>
 {
@@ -32,4 +31,3 @@ if (app.Environment.IsDevelopment())
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
-

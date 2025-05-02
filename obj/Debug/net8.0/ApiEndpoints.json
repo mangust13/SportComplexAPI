@@ -131,6 +131,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "SportComplexAPI.Controllers.ClientsController",
+    "Method": "DeleteClient",
+    "RelativePath": "api/Clients/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "SportComplexAPI.Controllers.PurchasesController",
     "Method": "CreatePurchase",
     "RelativePath": "api/Purchases",
@@ -229,6 +245,22 @@
       {
         "Name": "dto",
         "Type": "SportComplexAPI.DTOs.SubscriptionDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.SubscriptionsController",
+    "Method": "DeleteSubscription",
+    "RelativePath": "api/Subscriptions/{subscriptionId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "subscriptionId",
+        "Type": "System.Int32",
         "IsRequired": true
       }
     ],

@@ -34,19 +34,21 @@ namespace SportComplexAPI.Controllers
                 .AsQueryable();
 
             // Searching
-            if (!string.IsNullOrWhiteSpace(search))
-            {
-                search = search.ToLower();
+            //if (!string.IsNullOrWhiteSpace(search))
+            //{
+            //    search = search.ToLower();
 
-                query = query.Where(s => s.subscription_name.ToLower().Contains(search) ||
-                    s.subscription_total_cost.ToString().Contains(search) ||
-                    s.BaseSubscription.SubscriptionVisitTime.subscription_visit_time.Contains(search) ||
-                    s.BaseSubscription.SubscriptionTerm.subscription_term.Contains(search) ||
-                    s.SubscriptionActivities.Any(sa =>
-                        sa.Activity.activity_name.ToLower().Contains(search)
-                    )
-                );
-            }
+            //    query = query.Where(s =>
+            //        s.subscription_name.ToLower().Contains(search) ||
+            //        s.subscription_total_cost.ToString().Contains(search) ||
+            //        s.BaseSubscription.SubscriptionVisitTime.subscription_visit_time.ToLower().Contains(search) ||
+            //        s.BaseSubscription.SubscriptionTerm.subscription_term.ToLower().Contains(search) ||
+            //        s.SubscriptionActivities.Any(sa =>
+            //            sa.Activity.activity_name.ToLower().Contains(search)
+            //        )
+            //    );
+            //}
+
 
             // Sorting
             query = (sortBy, order.ToLower()) switch
@@ -173,6 +175,30 @@ namespace SportComplexAPI.Controllers
 
             return Ok(new { message = "Абонемент успішно створено." });
         }
+
+        [HttpDelete("{subscriptionId}")]
+        public async Task<IActionResult> DeleteSubscription(int subscriptionId)
+        {
+            var subscription = await _context.Subscriptions
+                .Include(s => s.SubscriptionActivities)
+                .FirstOrDefaultAsync(s => s.subscription_id == subscriptionId);
+
+            if (subscription == null)
+                return NotFound();
+
+            if (subscription.SubscriptionActivities != null && subscription.SubscriptionActivities.Any())
+            {
+                _context.SubscriptionActivities.RemoveRange(subscription.SubscriptionActivities);
+            }
+
+            _context.Subscriptions.Remove(subscription);
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new { Message = $"Абонемент з Id {subscriptionId} та всі пов’язані активності видалені." });
+        }
+
+
         private async Task<string> GenerateUniqueSubscriptionName(string visitTime, decimal totalCost, List<string> activityNames)
         {
             string part1 = (visitTime == "Безлімітний") ? "Premium" : "Standard";

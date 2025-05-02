@@ -59,9 +59,51 @@ namespace SportComplexAPI.Controllers
 
             return Ok(new
             {
-                Message = "Клієнт успішно створений!",
-                ClientId = client.client_id
+                ClientId = client.client_id,
+                ClientFullName = client.client_full_name,
+                ClientPhoneNumber = client.client_phone_number,
+                ClientGender = gender.gender_name
             });
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateClient(int id, [FromBody] ClientCreateDto dto)
+        {
+            var client = await _context.Clients.FindAsync(id);
+            if (client == null)
+                return NotFound("Клієнт не знайдений.");
+
+            var gender = await _context.Genders
+                .FirstOrDefaultAsync(g => g.gender_name == dto.ClientGender);
+            if (gender == null)
+                return BadRequest($"Гендер '{dto.ClientGender}' не знайдений.");
+
+            client.client_full_name = dto.ClientFullName;
+            client.client_phone_number = dto.ClientPhoneNumber;
+            client.client_gender_id = gender.gender_id;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new
+            {
+                ClientId = client.client_id,
+                ClientFullName = client.client_full_name,
+                ClientPhoneNumber = client.client_phone_number,
+                ClientGender = gender.gender_name
+            });
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteClient(int id)
+        {
+            var client = await _context.Clients.FindAsync(id);
+            if (client == null)
+                return NotFound("Клієнт не знайдений.");
+
+            _context.Clients.Remove(client);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = $"Клієнт з ID {id} успішно видалений." });
         }
 
     }
