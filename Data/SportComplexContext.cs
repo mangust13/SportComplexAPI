@@ -37,6 +37,12 @@ namespace SportComplexAPI.Data
         public DbSet<SubscriptionVisitTime> SubscriptionVisitTimes { get; set; }
 
         public DbSet<SubscriptionActivity> SubscriptionActivities { get; set; }
+        public DbSet<TrainerActivity> TrainerActivities { get; set; } = null!;
         public DbSet<Activity> Activities { get; set; }
+        public DbSet<City> Cities { get; set; } = null!;
+        public DbSet<Schedule> Schedules { get; set; } = null!;
+        public DbSet<Models.DayOfWeek> DaysOfWeek { get; set; } = null!;
+
+
     }
 }

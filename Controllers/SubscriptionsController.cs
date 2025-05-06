@@ -18,7 +18,7 @@ namespace SportComplexAPI.Controllers
 
         [HttpGet("subscriptions-view")]
         public async Task<IActionResult> GetAllSubscriptions(
-            string? search = null, string sortBy = "name",
+            string sortBy = "name",
             string order = "asc", decimal? minCost = null,
             decimal? maxCost = null, string? activities = null,
             string? visitTime = null, string? term = null
@@ -32,22 +32,6 @@ namespace SportComplexAPI.Controllers
                 .Include(s => s.SubscriptionActivities)
                     .ThenInclude(sa => sa.Activity)
                 .AsQueryable();
-
-            // Searching
-            //if (!string.IsNullOrWhiteSpace(search))
-            //{
-            //    search = search.ToLower();
-
-            //    query = query.Where(s =>
-            //        s.subscription_name.ToLower().Contains(search) ||
-            //        s.subscription_total_cost.ToString().Contains(search) ||
-            //        s.BaseSubscription.SubscriptionVisitTime.subscription_visit_time.ToLower().Contains(search) ||
-            //        s.BaseSubscription.SubscriptionTerm.subscription_term.ToLower().Contains(search) ||
-            //        s.SubscriptionActivities.Any(sa =>
-            //            sa.Activity.activity_name.ToLower().Contains(search)
-            //        )
-            //    );
-            //}
 
 
             // Sorting

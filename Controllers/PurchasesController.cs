@@ -18,7 +18,6 @@ namespace SportComplexAPI.Controllers
 
         [HttpGet("purchases-view")]
         public async Task<IActionResult> GetPurchases(
-            string? search = null,
             string sortBy = "purchaseDate",
             string order = "desc",
             string? activities = null,
@@ -31,6 +30,7 @@ namespace SportComplexAPI.Controllers
             var query = _context.Purchases
                 .Include(p => p.PaymentMethod)
                 .Include(p => p.Client)
+                    .ThenInclude(c => c.Gender)
                 .Include(p => p.Subscription)
                     .ThenInclude(s => s.BaseSubscription)
                         .ThenInclude(bs => bs.SubscriptionTerm)
@@ -41,26 +41,6 @@ namespace SportComplexAPI.Controllers
                     .ThenInclude(s => s.SubscriptionActivities)
                         .ThenInclude(sa => sa.Activity)
                 .AsQueryable();
-
-            // Searching
-            if (!string.IsNullOrWhiteSpace(search))
-            {
-                search = search.ToLower();
-
-                query = query.Where(p =>
-                    p.purchase_number.ToString().Contains(search) ||
-                    p.Client.client_full_name.ToLower().Contains(search) ||
-                    p.Client.client_phone_number.Contains(search) ||
-                    p.PaymentMethod.payment_method.ToLower().Contains(search) ||
-                    p.Subscription.subscription_name.ToLower().Contains(search) ||
-                    p.Subscription.subscription_total_cost.ToString().Contains(search) ||
-                    p.Subscription.BaseSubscription.SubscriptionTerm.subscription_term.ToLower().Contains(search) ||
-                    p.Subscription.BaseSubscription.SubscriptionVisitTime.subscription_visit_time.ToLower().Contains(search) ||
-                    p.Subscription.SubscriptionActivities.Any(sa =>
-                        sa.Activity.activity_name.ToLower().Contains(search)
-                    )
-                );
-            }
 
             // Sorting
             query = (sortBy, order.ToLower()) switch
@@ -73,30 +53,26 @@ namespace SportComplexAPI.Controllers
                 ("subscriptionName", "desc") => query.OrderByDescending(p => p.Subscription.subscription_name),
                 ("subscriptionTotalCost", "asc") => query.OrderBy(p => p.Subscription.subscription_total_cost),
                 ("subscriptionTotalCost", "desc") => query.OrderByDescending(p => p.Subscription.subscription_total_cost),
-                _ => query.OrderByDescending(p => p.purchase_date) // default fallback
+                _ => query.OrderByDescending(p => p.purchase_date)
             };
 
-            //Filtration    
-            // 🔗 Фільтрація: методи оплати
+            // Filters (unchanged)
             if (!string.IsNullOrWhiteSpace(paymentMethods))
             {
                 var methods = paymentMethods.Split(',', StringSplitOptions.RemoveEmptyEntries)
                     .Select(m => m.Trim().ToLower())
                     .ToList();
-
                 if (methods.Any())
                 {
                     query = query.Where(p => methods.Contains(p.PaymentMethod.payment_method.ToLower()));
                 }
             }
 
-            // 🔗 Фільтрація: стать клієнта
             if (!string.IsNullOrWhiteSpace(clientGender))
             {
                 query = query.Where(p => p.Client.Gender.gender_name.ToLower() == clientGender.ToLower());
             }
 
-            // 🔗 Фільтрація: вартість абонемента
             if (minCost.HasValue)
             {
                 query = query.Where(p => p.Subscription.subscription_total_cost >= minCost.Value);
@@ -107,19 +83,16 @@ namespace SportComplexAPI.Controllers
                 query = query.Where(p => p.Subscription.subscription_total_cost <= maxCost.Value);
             }
 
-            // 🔗 Фільтрація: дата покупки
             if (!string.IsNullOrEmpty(purchaseDate) && DateTime.TryParse(purchaseDate, out var parsedDate))
             {
                 query = query.Where(p => p.purchase_date.Date == parsedDate.Date);
             }
 
-            // 🔗 Фільтрація: види активностей
             if (!string.IsNullOrWhiteSpace(activities))
             {
                 var activityList = activities.Split(',', StringSplitOptions.RemoveEmptyEntries)
                     .Select(a => a.Trim().ToLower())
                     .ToList();
-
                 if (activityList.Any())
                 {
                     query = query.Where(p =>
@@ -128,35 +101,58 @@ namespace SportComplexAPI.Controllers
                 }
             }
 
-            // Returning
-            var result = await query
-                .Select(p => new PurchaseDto
-                {
-                    PurchaseId = p.purchase_id,
-                    PurchaseNumber = p.purchase_number,
-                    PurchaseDate = p.purchase_date,
-                    PaymentMethod = p.PaymentMethod.payment_method,
-                    ClientFullName = p.Client.client_full_name,
-                    ClientGender = p.Client.Gender.gender_name,
-                    ClientPhoneNumber = p.Client.client_phone_number,
-                    SubscriptionName = p.Subscription.subscription_name,
-                    SubscriptionTotalCost = p.Subscription.subscription_total_cost,
-                    SubscriptionTerm = p.Subscription.BaseSubscription.SubscriptionTerm.subscription_term,
-                    SubscriptionVisitTime = p.Subscription.BaseSubscription.SubscriptionVisitTime.subscription_visit_time,
-                    Activities = p.Subscription.SubscriptionActivities
-                        .Select(sa => new ActivityDto
-                        {
-                            ActivityName = sa.Activity.activity_name,
-                            ActivityPrice = sa.Activity.activity_price,
-                            ActivityDescription = sa.Activity.activity_description,
-                            ActivityTypeAmount = sa.activity_type_amount
-                        })
-                        .ToList()
-                })
+            var purchaseIds = await query.Select(p => p.purchase_id).ToListAsync();
+
+            var attendanceCounts = await _context.AttendanceRecords
+                .Where(ar => purchaseIds.Contains(ar.purchase_id))
+                .GroupBy(ar => ar.purchase_id)
+                .Select(g => new { PurchaseId = g.Key, Count = g.Count() })
+                .ToDictionaryAsync(x => x.PurchaseId, x => x.Count);
+
+            var purchases = await query
+                .Include(p => p.PaymentMethod)
+                .Include(p => p.Client)
+                .Include(p => p.Subscription)
+                    .ThenInclude(s => s.BaseSubscription)
+                        .ThenInclude(bs => bs.SubscriptionTerm)
+                .Include(p => p.Subscription)
+                    .ThenInclude(s => s.BaseSubscription)
+                        .ThenInclude(bs => bs.SubscriptionVisitTime)
+                .Include(p => p.Subscription)
+                    .ThenInclude(s => s.SubscriptionActivities)
+                        .ThenInclude(sa => sa.Activity)
                 .ToListAsync();
 
+            var result = purchases.Select(p => new PurchaseDto
+            {
+                PurchaseId = p.purchase_id,
+                PurchaseNumber = p.purchase_number,
+                PurchaseDate = p.purchase_date,
+                PaymentMethod = p.PaymentMethod?.payment_method ?? "—",
+                ClientFullName = p.Client?.client_full_name ?? "—",
+                ClientGender = p.Client?.Gender?.gender_name ?? "—",
+                ClientPhoneNumber = p.Client?.client_phone_number ?? "—",
+                SubscriptionName = p.Subscription?.subscription_name ?? "—",
+                SubscriptionTotalCost = p.Subscription?.subscription_total_cost ?? 0,
+                SubscriptionTerm = p.Subscription?.BaseSubscription?.SubscriptionTerm?.subscription_term ?? "—",
+                SubscriptionVisitTime = p.Subscription?.BaseSubscription?.SubscriptionVisitTime?.subscription_visit_time ?? "—",
+                Activities = p.Subscription?.SubscriptionActivities != null
+                    ? p.Subscription.SubscriptionActivities.Select(sa => new ActivityDto
+                    {
+                        ActivityName = sa.Activity?.activity_name ?? "—",
+                        ActivityPrice = sa.Activity?.activity_price ?? 0,
+                        ActivityDescription = sa.Activity?.activity_description ?? "—",
+                        ActivityTypeAmount = sa.activity_type_amount
+                    }).ToList()
+                    : new List<ActivityDto>(),
+                TotalAttendances = attendanceCounts.TryGetValue(p.purchase_id, out var count) ? count : 0
+            }).ToList();
+
+
             return Ok(result);
+
         }
+
 
         public class PurchaseCreateDto
         {

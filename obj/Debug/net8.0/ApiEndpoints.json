@@ -132,6 +132,27 @@
   },
   {
     "ContainingType": "SportComplexAPI.Controllers.ClientsController",
+    "Method": "UpdateClient",
+    "RelativePath": "api/Clients/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "SportComplexAPI.Controllers.ClientsController\u002BClientCreateDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.ClientsController",
     "Method": "DeleteClient",
     "RelativePath": "api/Clients/{id}",
     "HttpMethod": "DELETE",
@@ -187,11 +208,6 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "search",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
         "Name": "sortBy",
         "Type": "System.String",
         "IsRequired": false
@@ -228,6 +244,57 @@
       },
       {
         "Name": "purchaseDate",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.SportComplexesController",
+    "Method": "GetAddresses",
+    "RelativePath": "api/SportComplexes/addresses",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.SportComplexesController",
+    "Method": "GetAllSportComplexes",
+    "RelativePath": "api/SportComplexes/all",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.SportComplexesController",
+    "Method": "GetCities",
+    "RelativePath": "api/SportComplexes/cities",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.SportComplexesController",
+    "Method": "GetSportComplexId",
+    "RelativePath": "api/SportComplexes/id",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "city",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "address",
         "Type": "System.String",
         "IsRequired": false
       }
@@ -275,11 +342,6 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "search",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
         "Name": "sortBy",
         "Type": "System.String",
         "IsRequired": false
@@ -313,6 +375,112 @@
         "Name": "term",
         "Type": "System.String",
         "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.TrainersController",
+    "Method": "AddTrainer",
+    "RelativePath": "api/Trainers",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "SportComplexAPI.Controllers.TrainersController\u002BAddTrainerDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.TrainersController",
+    "Method": "DeleteTrainer",
+    "RelativePath": "api/Trainers/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.TrainersController",
+    "Method": "GetAllTrainersWithFullSchedules",
+    "RelativePath": "api/Trainers/full-schedules",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "gender",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "cities",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "addresses",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.TrainersController",
+    "Method": "GetActivitiesForTrainer",
+    "RelativePath": "api/Trainers/trainer/{trainerId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "trainerId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.TrainersController",
+    "Method": "AddTrainerSchedule",
+    "RelativePath": "api/Trainers/TrainerSchedules",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "SportComplexAPI.Controllers.TrainersController\u002BAddTrainerScheduleDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.TrainersController",
+    "Method": "DeleteTrainerSchedule",
+    "RelativePath": "api/Trainers/TrainerSchedules/{scheduleId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "scheduleId",
+        "Type": "System.Int32",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []

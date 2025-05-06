@@ -8,7 +8,7 @@ namespace SportComplexAPI.Models
         [Key]
         public int sport_complex_id { get; set; }
         [ForeignKey("City")]
-        public int city_id { get; set; }
+        public int complex_city_id { get; set; }
         public City City { get; set; }
 
         [Required]
