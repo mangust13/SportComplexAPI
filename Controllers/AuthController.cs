@@ -21,31 +21,25 @@ namespace SportComplexAPI.Controllers
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginRequest request)
         {
-            try
+            var user = _context.Users
+                .Include(u => u.Role)
+                .SingleOrDefault(u => u.UserName == request.UserName);
+
+
+            if (user == null) return Unauthorized("Invalid username");
+
+            var sha256 = SHA256.Create();
+            var hashed = Convert.ToBase64String(sha256.ComputeHash(Encoding.UTF8.GetBytes(request.Password)));
+
+            if (hashed != user.PasswordHash)
+                return Unauthorized("Invalid password");
+
+            return Ok(new
             {
-                var user = _context.Users
-                    .Include(u => u.Role)
-                    .SingleOrDefault(u => u.UserName == request.UserName);
-
-
-                if (user == null) return Unauthorized("Invalid username");
-
-                var sha256 = SHA256.Create();
-                var hashed = Convert.ToBase64String(sha256.ComputeHash(Encoding.UTF8.GetBytes(request.Password)));
-
-                if (hashed != user.PasswordHash)
-                    return Unauthorized("Invalid password");
-
-                return Ok(new
-                {
-                    username = user.UserName,
-                    role = user.Role.RoleName
-                });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"💥 Server error: {ex.Message}");
-            }
+                username = user.UserName,
+                role = user.Role.RoleName,
+                trainerId = user.TrainerId
+            });
         }
 
         [HttpPost("register")]
@@ -53,6 +47,7 @@ namespace SportComplexAPI.Controllers
         {
             if (await _context.Users.AnyAsync(u => u.UserName == request.UserName))
                 return BadRequest("Username already exists");
+
 
             var role = await _context.UserRoles.SingleOrDefaultAsync(r => r.RoleName == request.RoleName);
             if (role == null)
@@ -68,7 +63,18 @@ namespace SportComplexAPI.Controllers
                 RoleId = role.RoleId
             };
 
+            if (request.RoleName == "Trainer")
+            {
+                var trainer = await _context.Trainers.SingleOrDefaultAsync(t => t.trainer_full_name == request.UserName);
+                if (trainer == null)
+                {
+                    return BadRequest("No such trainer exists");
+                }
+                user.TrainerId = trainer.trainer_id;
+            }
+
             _context.Users.Add(user);
+
             await _context.SaveChangesAsync();
 
             return Ok(new { message = "User registered successfully" });

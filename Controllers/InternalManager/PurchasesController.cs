@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SportComplexAPI.Data;
-using SportComplexAPI.DTOs;
+using SportComplexAPI.DTOs.InternalManager;
 using SportComplexAPI.Models;
 
-namespace SportComplexAPI.Controllers
+namespace SportComplexAPI.Controllers.InternalManager
 {
     [ApiController]
     [Route("api/[controller]")]

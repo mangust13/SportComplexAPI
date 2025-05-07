@@ -1,4 +1,4 @@
-﻿namespace SportComplexAPI.DTOs
+﻿namespace SportComplexAPI.DTOs.InternalManager
 {
     public class TrainerFullScheduleDto
     {

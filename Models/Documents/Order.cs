@@ -26,5 +26,6 @@ namespace SportComplexAPI.Models
         public Supplier Supplier { get; set; }
         public OrderStatus OrderStatus { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
+        public ICollection<PurchasedProduct> PurchasedProducts { get; set; } = new List<PurchasedProduct>();
     }
 }

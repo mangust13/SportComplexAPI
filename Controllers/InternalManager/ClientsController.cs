@@ -4,7 +4,7 @@ using SportComplexAPI.Data;
 using SportComplexAPI.DTOs;
 using SportComplexAPI.Models;
 
-namespace SportComplexAPI.Controllers
+namespace SportComplexAPI.Controllers.InternalManager
 {
     [ApiController]
     [Route("api/[controller]")]

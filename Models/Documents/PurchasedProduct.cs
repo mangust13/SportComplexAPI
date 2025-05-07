@@ -20,5 +20,6 @@ namespace SportComplexAPI.Models
 
         public Order Order { get; set; }
         public Product Product { get; set; }
+        public ICollection<Delivery> Deliveries { get; set; } = new List<Delivery>();
     }
 }

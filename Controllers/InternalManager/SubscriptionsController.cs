@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SportComplexAPI.Data;
-using SportComplexAPI.DTOs;
+using SportComplexAPI.DTOs.InternalManager;
 using SportComplexAPI.Models;
 
-namespace SportComplexAPI.Controllers
+namespace SportComplexAPI.Controllers.InternalManager
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -185,7 +185,7 @@ namespace SportComplexAPI.Controllers
 
         private async Task<string> GenerateUniqueSubscriptionName(string visitTime, decimal totalCost, List<string> activityNames)
         {
-            string part1 = (visitTime == "Безлімітний") ? "Premium" : "Standard";
+            string part1 = visitTime == "Безлімітний" ? "Premium" : "Standard";
             string part2 = totalCost > 1500 ? "Elite" : "Basic";
 
             var mindBody = new[] { "Йога", "Пілатес", "БодіБаланс" };

@@ -24,5 +24,10 @@ namespace SportComplexAPI.Models
 
         [ForeignKey("RoleId")]
         public UserRole Role { get; set; }
+
+        [Column("trainer_id")]
+        public int? TrainerId { get; set; }
+        [ForeignKey("TrainerId")]
+        public Trainer? Trainer { get; set; }
     }
 }

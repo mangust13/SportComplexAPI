@@ -1,6 +1,6 @@
 [
   {
-    "ContainingType": "SportComplexAPI.Controllers.ActivitiesController",
+    "ContainingType": "SportComplexAPI.Controllers.InternalManager.ActivitiesController",
     "Method": "GetAllActivities",
     "RelativePath": "api/Activities",
     "HttpMethod": "GET",
@@ -10,7 +10,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SportComplexAPI.Controllers.ActivitiesController",
+    "ContainingType": "SportComplexAPI.Controllers.InternalManager.ActivitiesController",
     "Method": "CreateActivity",
     "RelativePath": "api/Activities",
     "HttpMethod": "POST",
@@ -19,14 +19,14 @@
     "Parameters": [
       {
         "Name": "dto",
-        "Type": "SportComplexAPI.DTOs.ActivityCreateUpdateDTO",
+        "Type": "SportComplexAPI.DTOs.InternalManager.ActivityCreateUpdateDTO",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SportComplexAPI.Controllers.ActivitiesController",
+    "ContainingType": "SportComplexAPI.Controllers.InternalManager.ActivitiesController",
     "Method": "UpdateActivity",
     "RelativePath": "api/Activities/{id}",
     "HttpMethod": "PUT",
@@ -40,14 +40,14 @@
       },
       {
         "Name": "dto",
-        "Type": "SportComplexAPI.DTOs.ActivityCreateUpdateDTO",
+        "Type": "SportComplexAPI.DTOs.InternalManager.ActivityCreateUpdateDTO",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SportComplexAPI.Controllers.ActivitiesController",
+    "ContainingType": "SportComplexAPI.Controllers.InternalManager.ActivitiesController",
     "Method": "DeleteActivity",
     "RelativePath": "api/Activities/{id}",
     "HttpMethod": "DELETE",
@@ -63,13 +63,39 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SportComplexAPI.Controllers.AttendanceRecordController",
-    "Method": "GetAttendanceFullInfo",
-    "RelativePath": "api/AttendanceRecord/attendance-record-view",
+    "ContainingType": "SportComplexAPI.Controllers.Trainer.AttendanceRecordController",
+    "Method": "GetAttendanceForTrainer",
+    "RelativePath": "api/AttendanceRecord/attendances",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "trainerId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "date",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "activities",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "sortBy",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "order",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -105,7 +131,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SportComplexAPI.Controllers.ClientsController",
+    "ContainingType": "SportComplexAPI.Controllers.InternalManager.ClientsController",
     "Method": "GetAllClients",
     "RelativePath": "api/Clients",
     "HttpMethod": "GET",
@@ -115,7 +141,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SportComplexAPI.Controllers.ClientsController",
+    "ContainingType": "SportComplexAPI.Controllers.InternalManager.ClientsController",
     "Method": "CreateClient",
     "RelativePath": "api/Clients",
     "HttpMethod": "POST",
@@ -124,14 +150,14 @@
     "Parameters": [
       {
         "Name": "dto",
-        "Type": "SportComplexAPI.Controllers.ClientsController\u002BClientCreateDto",
+        "Type": "SportComplexAPI.Controllers.InternalManager.ClientsController\u002BClientCreateDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SportComplexAPI.Controllers.ClientsController",
+    "ContainingType": "SportComplexAPI.Controllers.InternalManager.ClientsController",
     "Method": "UpdateClient",
     "RelativePath": "api/Clients/{id}",
     "HttpMethod": "PUT",
@@ -145,14 +171,14 @@
       },
       {
         "Name": "dto",
-        "Type": "SportComplexAPI.Controllers.ClientsController\u002BClientCreateDto",
+        "Type": "SportComplexAPI.Controllers.InternalManager.ClientsController\u002BClientCreateDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SportComplexAPI.Controllers.ClientsController",
+    "ContainingType": "SportComplexAPI.Controllers.InternalManager.ClientsController",
     "Method": "DeleteClient",
     "RelativePath": "api/Clients/{id}",
     "HttpMethod": "DELETE",
@@ -168,7 +194,103 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SportComplexAPI.Controllers.PurchasesController",
+    "ContainingType": "SportComplexAPI.Controllers.PurchaseManager.OrdersController",
+    "Method": "GetBrands",
+    "RelativePath": "api/Orders/all-brands",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[SportComplexAPI.Controllers.PurchaseManager.OrdersController\u002BBrandDto, SportComplexAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.PurchaseManager.OrdersController",
+    "Method": "GetOrders",
+    "RelativePath": "api/Orders/all-orders",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "sortBy",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "order",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "supplierId",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "brandId",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "minTotal",
+        "Type": "System.Nullable\u00601[[System.Decimal, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "maxTotal",
+        "Type": "System.Nullable\u00601[[System.Decimal, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "orderDate",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[SportComplexAPI.DTOs.PurchaseManager.OrderDto, SportComplexAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.PurchaseManager.OrdersController",
+    "Method": "GetSuppliers",
+    "RelativePath": "api/Orders/all-suppliers",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[SportComplexAPI.Controllers.PurchaseManager.OrdersController\u002BSupplierFilltrationDto, SportComplexAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.InternalManager.PurchasesController",
     "Method": "CreatePurchase",
     "RelativePath": "api/Purchases",
     "HttpMethod": "POST",
@@ -177,14 +299,14 @@
     "Parameters": [
       {
         "Name": "dto",
-        "Type": "SportComplexAPI.Controllers.PurchasesController\u002BPurchaseCreateDto",
+        "Type": "SportComplexAPI.Controllers.InternalManager.PurchasesController\u002BPurchaseCreateDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SportComplexAPI.Controllers.PurchasesController",
+    "ContainingType": "SportComplexAPI.Controllers.InternalManager.PurchasesController",
     "Method": "DeletePurchase",
     "RelativePath": "api/Purchases/{purchaseId}",
     "HttpMethod": "DELETE",
@@ -200,7 +322,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SportComplexAPI.Controllers.PurchasesController",
+    "ContainingType": "SportComplexAPI.Controllers.InternalManager.PurchasesController",
     "Method": "GetPurchases",
     "RelativePath": "api/Purchases/purchases-view",
     "HttpMethod": "GET",
@@ -251,7 +373,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SportComplexAPI.Controllers.SportComplexesController",
+    "ContainingType": "SportComplexAPI.Controllers.InternalManager.SportComplexesController",
     "Method": "GetAddresses",
     "RelativePath": "api/SportComplexes/addresses",
     "HttpMethod": "GET",
@@ -261,7 +383,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SportComplexAPI.Controllers.SportComplexesController",
+    "ContainingType": "SportComplexAPI.Controllers.InternalManager.SportComplexesController",
     "Method": "GetAllSportComplexes",
     "RelativePath": "api/SportComplexes/all",
     "HttpMethod": "GET",
@@ -271,7 +393,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SportComplexAPI.Controllers.SportComplexesController",
+    "ContainingType": "SportComplexAPI.Controllers.InternalManager.SportComplexesController",
     "Method": "GetCities",
     "RelativePath": "api/SportComplexes/cities",
     "HttpMethod": "GET",
@@ -281,7 +403,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SportComplexAPI.Controllers.SportComplexesController",
+    "ContainingType": "SportComplexAPI.Controllers.InternalManager.SportComplexesController",
     "Method": "GetSportComplexId",
     "RelativePath": "api/SportComplexes/id",
     "HttpMethod": "GET",
@@ -302,7 +424,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SportComplexAPI.Controllers.SubscriptionsController",
+    "ContainingType": "SportComplexAPI.Controllers.InternalManager.SubscriptionsController",
     "Method": "CreateSubscription",
     "RelativePath": "api/Subscriptions",
     "HttpMethod": "POST",
@@ -311,14 +433,14 @@
     "Parameters": [
       {
         "Name": "dto",
-        "Type": "SportComplexAPI.DTOs.SubscriptionDto",
+        "Type": "SportComplexAPI.DTOs.InternalManager.SubscriptionDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SportComplexAPI.Controllers.SubscriptionsController",
+    "ContainingType": "SportComplexAPI.Controllers.InternalManager.SubscriptionsController",
     "Method": "DeleteSubscription",
     "RelativePath": "api/Subscriptions/{subscriptionId}",
     "HttpMethod": "DELETE",
@@ -334,7 +456,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SportComplexAPI.Controllers.SubscriptionsController",
+    "ContainingType": "SportComplexAPI.Controllers.InternalManager.SubscriptionsController",
     "Method": "GetAllSubscriptions",
     "RelativePath": "api/Subscriptions/subscriptions-view",
     "HttpMethod": "GET",
@@ -380,7 +502,59 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SportComplexAPI.Controllers.TrainersController",
+    "ContainingType": "SportComplexAPI.Controllers.PurchaseManager.SuppliersController",
+    "Method": "AddSupplier",
+    "RelativePath": "api/Suppliers",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "SportComplexAPI.Controllers.PurchaseManager.SuppliersController\u002BSupplierFullDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.PurchaseManager.SuppliersController",
+    "Method": "DeleteSupplier",
+    "RelativePath": "api/Suppliers/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.PurchaseManager.SuppliersController",
+    "Method": "GetAllSuppliers",
+    "RelativePath": "api/Suppliers/all",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[SportComplexAPI.Controllers.PurchaseManager.SuppliersController\u002BSupplierFullDto, SportComplexAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.InternalManager.TrainersController",
     "Method": "AddTrainer",
     "RelativePath": "api/Trainers",
     "HttpMethod": "POST",
@@ -389,14 +563,14 @@
     "Parameters": [
       {
         "Name": "dto",
-        "Type": "SportComplexAPI.Controllers.TrainersController\u002BAddTrainerDto",
+        "Type": "SportComplexAPI.Controllers.InternalManager.TrainersController\u002BAddTrainerDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SportComplexAPI.Controllers.TrainersController",
+    "ContainingType": "SportComplexAPI.Controllers.InternalManager.TrainersController",
     "Method": "DeleteTrainer",
     "RelativePath": "api/Trainers/{id}",
     "HttpMethod": "DELETE",
@@ -412,7 +586,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SportComplexAPI.Controllers.TrainersController",
+    "ContainingType": "SportComplexAPI.Controllers.InternalManager.TrainersController",
     "Method": "GetAllTrainersWithFullSchedules",
     "RelativePath": "api/Trainers/full-schedules",
     "HttpMethod": "GET",
@@ -438,7 +612,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SportComplexAPI.Controllers.TrainersController",
+    "ContainingType": "SportComplexAPI.Controllers.InternalManager.TrainersController",
     "Method": "GetActivitiesForTrainer",
     "RelativePath": "api/Trainers/trainer/{trainerId}",
     "HttpMethod": "GET",
@@ -454,7 +628,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SportComplexAPI.Controllers.TrainersController",
+    "ContainingType": "SportComplexAPI.Controllers.InternalManager.TrainersController",
     "Method": "AddTrainerSchedule",
     "RelativePath": "api/Trainers/TrainerSchedules",
     "HttpMethod": "POST",
@@ -463,14 +637,14 @@
     "Parameters": [
       {
         "Name": "dto",
-        "Type": "SportComplexAPI.Controllers.TrainersController\u002BAddTrainerScheduleDto",
+        "Type": "SportComplexAPI.Controllers.InternalManager.TrainersController\u002BAddTrainerScheduleDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SportComplexAPI.Controllers.TrainersController",
+    "ContainingType": "SportComplexAPI.Controllers.InternalManager.TrainersController",
     "Method": "DeleteTrainerSchedule",
     "RelativePath": "api/Trainers/TrainerSchedules/{scheduleId}",
     "HttpMethod": "DELETE",

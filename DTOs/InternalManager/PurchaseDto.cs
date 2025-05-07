@@ -5,7 +5,7 @@ using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using SportComplexAPI.Models;
 
-namespace SportComplexAPI.DTOs
+namespace SportComplexAPI.DTOs.InternalManager
 {
     public class PurchaseDto
     {

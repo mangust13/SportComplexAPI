@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SportComplexAPI.Data;
-using SportComplexAPI.DTOs;
+using SportComplexAPI.DTOs.InternalManager;
 using SportComplexAPI.Models;
 
-namespace SportComplexAPI.Controllers
+namespace SportComplexAPI.Controllers.InternalManager
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -148,7 +148,7 @@ namespace SportComplexAPI.Controllers
             if (activities.Count != dto.ActivityIds.Count)
                 return BadRequest("Деякі активності не знайдено.");
 
-            var newTrainer = new Trainer
+            var newTrainer = new SportComplexAPI.Models.Trainer
             {
                 trainer_full_name = dto.TrainerFullName,
                 trainer_phone_number = dto.TrainerPhoneNumber,
