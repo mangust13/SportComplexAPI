@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SportComplexAPI.Data;
 using SportComplexAPI.DTOs.InternalManager;
 using SportComplexAPI.Models;
+using SportComplexAPI.Services;
 
 namespace SportComplexAPI.Controllers.InternalManager
 {
@@ -105,7 +106,6 @@ namespace SportComplexAPI.Controllers.InternalManager
             if (dto == null || dto.Activities == null || dto.Activities.Count == 0)
                 return BadRequest("Некоректні дані абонемента.");
 
-            // Знайти відповідний BaseSubscription (по терміну і часу відвідування)
             var baseSubscription = await _context.BaseSubscriptions
                 .Include(bs => bs.SubscriptionTerm)
                 .Include(bs => bs.SubscriptionVisitTime)
@@ -118,7 +118,6 @@ namespace SportComplexAPI.Controllers.InternalManager
                 return BadRequest("Не знайдено відповідний базовий абонемент.");
             }
 
-            // Створення нового абонемента
             var subscription = new Subscription
             {
                 base_subscription_id = baseSubscription.base_subscription_id,
@@ -133,7 +132,6 @@ namespace SportComplexAPI.Controllers.InternalManager
             _context.Subscriptions.Add(subscription);
             await _context.SaveChangesAsync();
 
-            // Створення активностей для підписки
             foreach (var act in dto.Activities)
             {
                 var activityEntity = await _context.Activities
@@ -141,7 +139,6 @@ namespace SportComplexAPI.Controllers.InternalManager
 
                 if (activityEntity == null)
                 {
-                    // Якщо активності не існує — можна або кидати помилку, або скіпати
                     return BadRequest($"Активність '{act.ActivityName}' не знайдена в базі.");
                 }
 
@@ -156,6 +153,12 @@ namespace SportComplexAPI.Controllers.InternalManager
             }
 
             await _context.SaveChangesAsync();
+
+            var userName = Request.Headers["X-User-Name"].FirstOrDefault() ?? "Anonymous";
+            var roleName = Request.Headers["X-User-Role"].FirstOrDefault() ?? "Unknown";
+
+            // Логування
+            LogService.LogAction(userName, roleName, $"Створив новий абонемент");
 
             return Ok(new { message = "Абонемент успішно створено." });
         }

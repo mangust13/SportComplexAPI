@@ -323,6 +323,27 @@
   },
   {
     "ContainingType": "SportComplexAPI.Controllers.InternalManager.PurchasesController",
+    "Method": "UpdatePurchase",
+    "RelativePath": "api/Purchases/{purchaseId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "purchaseId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "SportComplexAPI.Controllers.InternalManager.PurchasesController\u002BPurchaseUpdateDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.InternalManager.PurchasesController",
     "Method": "GetPurchases",
     "RelativePath": "api/Purchases/purchases-view",
     "HttpMethod": "GET",
@@ -370,6 +391,16 @@
         "IsRequired": false
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.InternalManager.PurchasesController",
+    "Method": "GetSubscriptionNames",
+    "RelativePath": "api/Purchases/subscriptions-names",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {

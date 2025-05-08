@@ -56,7 +56,7 @@ namespace SportComplexAPI.Controllers.InternalManager
                 _ => query.OrderByDescending(p => p.purchase_date)
             };
 
-            // Filters (unchanged)
+            // Filters
             if (!string.IsNullOrWhiteSpace(paymentMethods))
             {
                 var methods = paymentMethods.Split(',', StringSplitOptions.RemoveEmptyEntries)
@@ -164,7 +164,6 @@ namespace SportComplexAPI.Controllers.InternalManager
         [HttpPost]
         public async Task<IActionResult> CreatePurchase([FromBody] PurchaseCreateDto dto)
         {
-            // Перевірки
             var client = await _context.Clients.FindAsync(dto.ClientId);
             if (client == null) return NotFound($"Клієнт з ID {dto.ClientId} не знайдений.");
 
@@ -177,7 +176,6 @@ namespace SportComplexAPI.Controllers.InternalManager
             var maxPurchaseNumber = await _context.Purchases.MaxAsync(p => (int?)p.purchase_number) ?? 1;
             var nextPurchaseNumber = maxPurchaseNumber + 1;
 
-            // Створення покупки
             var purchase = new Purchase
             {
                 client_id = dto.ClientId,
@@ -209,5 +207,88 @@ namespace SportComplexAPI.Controllers.InternalManager
 
             return Ok(new { Message = $"Покупка з Id {purchaseId} видалена." });
         }
+
+        [HttpPut("{purchaseId}")]
+        public async Task<IActionResult> UpdatePurchase(int purchaseId, [FromBody] PurchaseUpdateDto dto)
+        {
+            var purchase = await _context.Purchases
+                .Include(p => p.PaymentMethod)
+                .Include(p => p.Client).ThenInclude(c => c.Gender)
+                .Include(p => p.Subscription).ThenInclude(s => s.BaseSubscription).ThenInclude(bs => bs.SubscriptionTerm)
+                .Include(p => p.Subscription).ThenInclude(s => s.BaseSubscription).ThenInclude(bs => bs.SubscriptionVisitTime)
+                .Include(p => p.Subscription).ThenInclude(s => s.SubscriptionActivities).ThenInclude(sa => sa.Activity)
+                .FirstOrDefaultAsync(p => p.purchase_id == purchaseId);
+
+            if (purchase == null) return NotFound($"Покупка з ID {purchaseId} не знайдена.");
+
+            var client = await _context.Clients.FindAsync(dto.ClientId);
+            if (client == null) return NotFound($"Клієнт з ID {dto.ClientId} не знайдений.");
+
+            var paymentMethod = await _context.PaymentMethods.FirstOrDefaultAsync(pm => pm.payment_method == dto.PaymentMethod);
+            if (paymentMethod == null) return NotFound($"Метод оплати {dto.PaymentMethod} не знайдений.");
+
+            var subscription = await _context.Subscriptions.FindAsync(dto.SubscriptionId);
+            if (subscription == null) return NotFound($"Абонемент {dto.SubscriptionId} не знайдений.");
+
+            purchase.client_id = client.client_id;
+            purchase.payment_method_id = paymentMethod.payment_method_id;
+            purchase.subscription_id = subscription.subscription_id;
+
+            await _context.SaveChangesAsync();
+
+            var attendanceCount = await _context.AttendanceRecords
+                .Where(ar => ar.purchase_id == purchaseId)
+                .CountAsync();
+
+            var updatedDto = new PurchaseDto
+            {
+                PurchaseId = purchase.purchase_id,
+                PurchaseNumber = purchase.purchase_number,
+                PurchaseDate = purchase.purchase_date,
+                PaymentMethod = paymentMethod.payment_method ?? "—",
+                ClientFullName = client.client_full_name ?? "—",
+                ClientGender = client.Gender.gender_name,
+                ClientPhoneNumber = client.client_phone_number ?? "—",
+                SubscriptionName = subscription.subscription_name ?? "—",
+                SubscriptionTotalCost = subscription.subscription_total_cost,
+                SubscriptionTerm = subscription.BaseSubscription?.SubscriptionTerm?.subscription_term ?? "—",
+                SubscriptionVisitTime = subscription.BaseSubscription?.SubscriptionVisitTime?.subscription_visit_time ?? "—",
+                Activities = subscription.SubscriptionActivities != null
+                    ? subscription.SubscriptionActivities.Select(sa => new ActivityDto
+                    {
+                        ActivityName = sa.Activity?.activity_name ?? "—",
+                        ActivityPrice = sa.Activity?.activity_price ?? 0,
+                        ActivityDescription = sa.Activity?.activity_description ?? "—",
+                        ActivityTypeAmount = sa.activity_type_amount
+                    }).ToList()
+                    : new List<ActivityDto>(),
+                TotalAttendances = attendanceCount
+            };
+
+            return Ok(updatedDto);
+        }
+
+
+        public class PurchaseUpdateDto
+        {
+            public int ClientId { get; set; }
+            public string PaymentMethod { get; set; }
+            public int SubscriptionId { get; set; }
+        }
+
+        [HttpGet("subscriptions-names")]
+        public async Task<IActionResult> GetSubscriptionNames()
+        {
+            var subscriptions = await _context.Subscriptions
+                .Select(s => new
+                {
+                    Name = s.subscription_name,
+                    TotalCost = s.subscription_total_cost
+                })
+                .ToListAsync();
+
+            return Ok(subscriptions);
+        }
+
     }
 }
