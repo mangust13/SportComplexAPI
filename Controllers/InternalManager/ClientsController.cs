@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SportComplexAPI.Data;
 using SportComplexAPI.DTOs;
 using SportComplexAPI.Models;
+using SportComplexAPI.Services;
 
 namespace SportComplexAPI.Controllers.InternalManager
 {
@@ -57,6 +58,11 @@ namespace SportComplexAPI.Controllers.InternalManager
             _context.Clients.Add(client);
             await _context.SaveChangesAsync();
 
+            var userName = Request.Headers["X-User-Name"].FirstOrDefault() ?? "Anonymous";
+            var roleName = Request.Headers["X-User-Role"].FirstOrDefault() ?? "Unknown";
+
+            LogService.LogAction(userName, roleName, $"Додав нового клієнта (ID: {client.client_id})");
+
             return Ok(new
             {
                 ClientId = client.client_id,
@@ -102,6 +108,11 @@ namespace SportComplexAPI.Controllers.InternalManager
 
             _context.Clients.Remove(client);
             await _context.SaveChangesAsync();
+
+            var userName = Request.Headers["X-User-Name"].FirstOrDefault() ?? "Anonymous";
+            var roleName = Request.Headers["X-User-Role"].FirstOrDefault() ?? "Unknown";
+
+            LogService.LogAction(userName, roleName, $"Видалив клієнта (ID: {id})");
 
             return Ok(new { message = $"Клієнт з ID {id} успішно видалений." });
         }

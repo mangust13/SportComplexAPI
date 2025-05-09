@@ -174,13 +174,14 @@ namespace SportComplexAPI.Controllers.InternalManager
                 return NotFound();
 
             if (subscription.SubscriptionActivities != null && subscription.SubscriptionActivities.Any())
-            {
                 _context.SubscriptionActivities.RemoveRange(subscription.SubscriptionActivities);
-            }
 
             _context.Subscriptions.Remove(subscription);
-
             await _context.SaveChangesAsync();
+
+            var userName = Request.Headers["X-User-Name"].FirstOrDefault() ?? "Anonymous";
+            var roleName = Request.Headers["X-User-Role"].FirstOrDefault() ?? "Unknown";
+            LogService.LogAction(userName, roleName, $"Видалив абонемент (ID: {subscriptionId})");
 
             return Ok(new { Message = $"Абонемент з Id {subscriptionId} та всі пов’язані активності видалені." });
         }

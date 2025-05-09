@@ -326,6 +326,29 @@
         }
       }
     },
+    "/api/ConcreteTrainers/{trainerId}/profile": {
+      "get": {
+        "tags": [
+          "ConcreteTrainers"
+        ],
+        "parameters": [
+          {
+            "name": "trainerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Orders/all-orders": {
       "get": {
         "tags": [
@@ -492,6 +515,18 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/api/Products/products-view": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }

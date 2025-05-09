@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SportComplexAPI.Data;
 using SportComplexAPI.DTOs.InternalManager;
 using SportComplexAPI.Models;
+using SportComplexAPI.Services;
 
 namespace SportComplexAPI.Controllers.InternalManager
 {
@@ -50,6 +51,10 @@ namespace SportComplexAPI.Controllers.InternalManager
             _context.Activities.Add(newActivity);
             await _context.SaveChangesAsync();
 
+            var userName = Request.Headers["X-User-Name"].FirstOrDefault() ?? "Anonymous";
+            var roleName = Request.Headers["X-User-Role"].FirstOrDefault() ?? "Unknown";
+            LogService.LogAction(userName, roleName, $"Додано нову активність (ID: {newActivity.activity_id}, Назва: {newActivity.activity_name})");
+
             return Ok(new
             {
                 ActivityId = newActivity.activity_id,
@@ -80,6 +85,7 @@ namespace SportComplexAPI.Controllers.InternalManager
                 ActivityDescription = activity.activity_description
             });
         }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteActivity(int id)
         {
@@ -89,6 +95,10 @@ namespace SportComplexAPI.Controllers.InternalManager
 
             _context.Activities.Remove(activity);
             await _context.SaveChangesAsync();
+
+            var userName = Request.Headers["X-User-Name"].FirstOrDefault() ?? "Anonymous";
+            var roleName = Request.Headers["X-User-Role"].FirstOrDefault() ?? "Unknown";
+            LogService.LogAction(userName, roleName, $"Видалив активність (ID: {id}, Назва: {activity.activity_name})");
 
             return Ok(new { message = "Активність успішно видалена." });
         }

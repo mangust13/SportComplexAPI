@@ -22,5 +22,7 @@ namespace SportComplexAPI.Models
         public string trainer_phone_number { get; set; }
 
         public ICollection<TrainerActivity> TrainerActivities { get; set; }
+        public ICollection<TrainerSchedule> TrainerSchedules { get; set; }
+
     }
 }

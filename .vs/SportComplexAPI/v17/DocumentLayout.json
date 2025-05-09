@@ -3,24 +3,12 @@
   "WorkspaceRootPath": "D:\\Univer\\Sem_06\\BDCourse\\SportComplexAPI\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{C5763920-DB7A-42C6-8C0E-358840F81F83}|SportComplexAPI.csproj|d:\\univer\\sem_06\\bdcourse\\sportcomplexapi\\controllers\\internalmanager\\subscriptionscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C5763920-DB7A-42C6-8C0E-358840F81F83}|SportComplexAPI.csproj|solutionrelative:controllers\\internalmanager\\subscriptionscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{C5763920-DB7A-42C6-8C0E-358840F81F83}|SportComplexAPI.csproj|d:\\univer\\sem_06\\bdcourse\\sportcomplexapi\\controllers\\trainer\\productscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C5763920-DB7A-42C6-8C0E-358840F81F83}|SportComplexAPI.csproj|solutionrelative:controllers\\trainer\\productscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C5763920-DB7A-42C6-8C0E-358840F81F83}|SportComplexAPI.csproj|d:\\univer\\sem_06\\bdcourse\\sportcomplexapi\\services\\logservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C5763920-DB7A-42C6-8C0E-358840F81F83}|SportComplexAPI.csproj|solutionrelative:services\\logservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C5763920-DB7A-42C6-8C0E-358840F81F83}|SportComplexAPI.csproj|d:\\univer\\sem_06\\bdcourse\\sportcomplexapi\\controllers\\internalmanager\\purchasescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C5763920-DB7A-42C6-8C0E-358840F81F83}|SportComplexAPI.csproj|solutionrelative:controllers\\internalmanager\\purchasescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C5763920-DB7A-42C6-8C0E-358840F81F83}|SportComplexAPI.csproj|d:\\univer\\sem_06\\bdcourse\\sportcomplexapi\\controllers\\purchasemanager\\orderscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C5763920-DB7A-42C6-8C0E-358840F81F83}|SportComplexAPI.csproj|solutionrelative:controllers\\purchasemanager\\orderscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C5763920-DB7A-42C6-8C0E-358840F81F83}|SportComplexAPI.csproj|d:\\univer\\sem_06\\bdcourse\\sportcomplexapi\\dtos\\purchasemanager\\orderdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C5763920-DB7A-42C6-8C0E-358840F81F83}|SportComplexAPI.csproj|solutionrelative:dtos\\purchasemanager\\orderdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,8 +18,21 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ProductsController.cs",
+              "DocumentMoniker": "D:\\Univer\\Sem_06\\BDCourse\\SportComplexAPI\\Controllers\\Trainer\\ProductsController.cs",
+              "RelativeDocumentMoniker": "Controllers\\Trainer\\ProductsController.cs",
+              "ToolTip": "D:\\Univer\\Sem_06\\BDCourse\\SportComplexAPI\\Controllers\\Trainer\\ProductsController.cs",
+              "RelativeToolTip": "Controllers\\Trainer\\ProductsController.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAcwCYAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-09T21:23:34.147Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Document",
               "DocumentIndex": 1,
@@ -40,61 +41,10 @@
               "RelativeDocumentMoniker": "Services\\LogService.cs",
               "ToolTip": "D:\\Univer\\Sem_06\\BDCourse\\SportComplexAPI\\Services\\LogService.cs",
               "RelativeToolTip": "Services\\LogService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-08T13:01:53.342Z",
+              "WhenOpened": "2025-05-09T20:42:50.723Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "SubscriptionsController.cs",
-              "DocumentMoniker": "D:\\Univer\\Sem_06\\BDCourse\\SportComplexAPI\\Controllers\\InternalManager\\SubscriptionsController.cs",
-              "RelativeDocumentMoniker": "Controllers\\InternalManager\\SubscriptionsController.cs",
-              "ToolTip": "D:\\Univer\\Sem_06\\BDCourse\\SportComplexAPI\\Controllers\\InternalManager\\SubscriptionsController.cs",
-              "RelativeToolTip": "Controllers\\InternalManager\\SubscriptionsController.cs",
-              "ViewState": "AgIAAIgAAAAAAAAAAAAIwKAAAABOAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-08T12:56:40.994Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "PurchasesController.cs",
-              "DocumentMoniker": "D:\\Univer\\Sem_06\\BDCourse\\SportComplexAPI\\Controllers\\InternalManager\\PurchasesController.cs",
-              "RelativeDocumentMoniker": "Controllers\\InternalManager\\PurchasesController.cs",
-              "ToolTip": "D:\\Univer\\Sem_06\\BDCourse\\SportComplexAPI\\Controllers\\InternalManager\\PurchasesController.cs",
-              "RelativeToolTip": "Controllers\\InternalManager\\PurchasesController.cs",
-              "ViewState": "AgIAANMAAAAAAAAAAADwvxIAAAAjAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-08T12:56:35.345Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "OrdersController.cs",
-              "DocumentMoniker": "D:\\Univer\\Sem_06\\BDCourse\\SportComplexAPI\\Controllers\\PurchaseManager\\OrdersController.cs",
-              "RelativeDocumentMoniker": "Controllers\\PurchaseManager\\OrdersController.cs",
-              "ToolTip": "D:\\Univer\\Sem_06\\BDCourse\\SportComplexAPI\\Controllers\\PurchaseManager\\OrdersController.cs",
-              "RelativeToolTip": "Controllers\\PurchaseManager\\OrdersController.cs",
-              "ViewState": "AgIAAFsAAAAAAAAAAADwv2oAAAAoAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-06T23:01:12.744Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "OrderDto.cs",
-              "DocumentMoniker": "D:\\Univer\\Sem_06\\BDCourse\\SportComplexAPI\\DTOs\\PurchaseManager\\OrderDto.cs",
-              "RelativeDocumentMoniker": "DTOs\\PurchaseManager\\OrderDto.cs",
-              "ToolTip": "D:\\Univer\\Sem_06\\BDCourse\\SportComplexAPI\\DTOs\\PurchaseManager\\OrderDto.cs",
-              "RelativeToolTip": "DTOs\\PurchaseManager\\OrderDto.cs",
-              "ViewState": "AgIAABUAAAAAAAAAAAAiwBcAAAAzAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-06T23:03:01.459Z"
             }
           ]
         }

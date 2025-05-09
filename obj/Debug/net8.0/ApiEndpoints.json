@@ -194,6 +194,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "SportComplexAPI.Controllers.Trainer.ConcreteTrainersController",
+    "Method": "GetTrainerProfile",
+    "RelativePath": "api/ConcreteTrainers/{trainerId}/profile",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "trainerId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "SportComplexAPI.Controllers.PurchaseManager.OrdersController",
     "Method": "GetBrands",
     "RelativePath": "api/Orders/all-brands",
@@ -288,6 +304,16 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.Trainer.ProductsController",
+    "Method": "GetProductsView",
+    "RelativePath": "api/Products/products-view",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "SportComplexAPI.Controllers.InternalManager.PurchasesController",

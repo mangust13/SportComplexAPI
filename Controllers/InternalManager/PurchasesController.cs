@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SportComplexAPI.Data;
 using SportComplexAPI.DTOs.InternalManager;
 using SportComplexAPI.Models;
+using SportComplexAPI.Services;
 
 namespace SportComplexAPI.Controllers.InternalManager
 {
@@ -17,15 +18,9 @@ namespace SportComplexAPI.Controllers.InternalManager
         }
 
         [HttpGet("purchases-view")]
-        public async Task<IActionResult> GetPurchases(
-            string sortBy = "purchaseDate",
-            string order = "desc",
-            string? activities = null,
-            string? paymentMethods = null,
-            string? clientGender = null,
-            decimal? minCost = null,
-            decimal? maxCost = null,
-            string? purchaseDate = null)
+        public async Task<IActionResult> GetPurchases(string sortBy = "purchaseDate", string order = "desc",
+            string? activities = null, string? paymentMethods = null, string? clientGender = null, decimal? minCost = null,
+            decimal? maxCost = null, string? purchaseDate = null)
         {
             var query = _context.Purchases
                 .Include(p => p.PaymentMethod)
@@ -69,24 +64,16 @@ namespace SportComplexAPI.Controllers.InternalManager
             }
 
             if (!string.IsNullOrWhiteSpace(clientGender))
-            {
                 query = query.Where(p => p.Client.Gender.gender_name.ToLower() == clientGender.ToLower());
-            }
 
             if (minCost.HasValue)
-            {
                 query = query.Where(p => p.Subscription.subscription_total_cost >= minCost.Value);
-            }
 
             if (maxCost.HasValue)
-            {
                 query = query.Where(p => p.Subscription.subscription_total_cost <= maxCost.Value);
-            }
 
             if (!string.IsNullOrEmpty(purchaseDate) && DateTime.TryParse(purchaseDate, out var parsedDate))
-            {
                 query = query.Where(p => p.purchase_date.Date == parsedDate.Date);
-            }
 
             if (!string.IsNullOrWhiteSpace(activities))
             {
@@ -95,9 +82,8 @@ namespace SportComplexAPI.Controllers.InternalManager
                     .ToList();
                 if (activityList.Any())
                 {
-                    query = query.Where(p =>
-                        p.Subscription.SubscriptionActivities
-                            .Any(sa => activityList.Contains(sa.Activity.activity_name.ToLower())));
+                    query = query.Where(p => p.Subscription.SubscriptionActivities
+                        .Any(sa => activityList.Contains(sa.Activity.activity_name.ToLower())));
                 }
             }
 
@@ -150,7 +136,6 @@ namespace SportComplexAPI.Controllers.InternalManager
 
 
             return Ok(result);
-
         }
 
 
@@ -188,6 +173,11 @@ namespace SportComplexAPI.Controllers.InternalManager
             _context.Purchases.Add(purchase);
             await _context.SaveChangesAsync();
 
+            var userName = Request.Headers["X-User-Name"].FirstOrDefault() ?? "Anonymous";
+            var roleName = Request.Headers["X-User-Role"].FirstOrDefault() ?? "Unknown";
+
+            LogService.LogAction(userName, roleName, $"Оформлена покупка (ID: {purchase.purchase_id}, №: {purchase.purchase_number})");
+
             return Ok(new
             {
                 Message = "Покупка успішно створена!",
@@ -204,6 +194,10 @@ namespace SportComplexAPI.Controllers.InternalManager
 
             _context.Purchases.Remove(purchase);
             await _context.SaveChangesAsync();
+
+            var userName = Request.Headers["X-User-Name"].FirstOrDefault() ?? "Anonymous";
+            var roleName = Request.Headers["X-User-Role"].FirstOrDefault() ?? "Unknown";
+            LogService.LogAction(userName, roleName, $"Видалив покупку (ID: {purchaseId})");
 
             return Ok(new { Message = $"Покупка з Id {purchaseId} видалена." });
         }
