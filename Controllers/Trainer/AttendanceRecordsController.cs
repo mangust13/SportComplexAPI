@@ -22,7 +22,8 @@ namespace SportComplexAPI.Controllers.Trainer
             [FromQuery] DateTime? date = null,
             [FromQuery] string? activities = null,
             [FromQuery] string? sortBy = null,
-            [FromQuery] string? order = null)
+            [FromQuery] string? order = null,
+            [FromQuery] string? purchaseNumber = null)
         {
             var query = _context.AttendanceRecords
                 .Include(a => a.Purchase)
@@ -38,19 +39,23 @@ namespace SportComplexAPI.Controllers.Trainer
                 .Where(a => a.Training.TrainerSchedule.trainer_id == trainerId)
                 .AsQueryable();
 
-            // Фільтр по даті відвідування (не по даті покупки!)
             if (date.HasValue)
             {
                 query = query.Where(a => a.attendance_date_time.Date == date.Value.Date);
             }
 
-            // Фільтр по активностях (якщо треба)
             if (!string.IsNullOrEmpty(activities))
             {
                 var activityList = activities.Split(',');
                 query = query.Where(a => a.Purchase.Subscription.SubscriptionActivities
                     .Any(sa => activityList.Contains(sa.Activity.activity_name)));
             }
+
+            if (int.TryParse(purchaseNumber, out var purchaseNum))
+            {
+                query = query.Where(a => a.Purchase.purchase_number == purchaseNum);
+            }
+
 
             // Сортування
             if (!string.IsNullOrEmpty(sortBy))
@@ -61,7 +66,7 @@ namespace SportComplexAPI.Controllers.Trainer
                         ? query.OrderBy(a => a.Purchase.purchase_number)
                         : query.OrderByDescending(a => a.Purchase.purchase_number);
                 }
-                else if (sortBy == "purchaseDate")
+                else if (sortBy == "attendanceDateTime")
                 {
                     query = order == "asc"
                         ? query.OrderBy(a => a.Purchase.purchase_date)

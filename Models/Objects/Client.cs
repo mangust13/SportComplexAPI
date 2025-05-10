@@ -16,5 +16,6 @@ namespace SportComplexAPI.Models
         public string client_full_name { get; set; }
         [MaxLength(15)]
         public string client_phone_number { get; set; }
+        public ICollection<Purchase> Purchases { get; set; }
     }
 }

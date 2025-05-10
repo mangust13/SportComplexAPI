@@ -94,6 +94,11 @@
         "Name": "order",
         "Type": "System.String",
         "IsRequired": false
+      },
+      {
+        "Name": "purchaseNumber",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -205,6 +210,38 @@
         "Name": "trainerId",
         "Type": "System.Int32",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.Trainer.ConcreteTrainersController",
+    "Method": "AddAttendance",
+    "RelativePath": "api/ConcreteTrainers/add-attendance",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "SportComplexAPI.Controllers.Trainer.ConcreteTrainersController\u002BAddAttendanceDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.Trainer.ConcreteTrainersController",
+    "Method": "GetEligibleClientsForSchedule",
+    "RelativePath": "api/ConcreteTrainers/eligible-clients",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "activityId",
+        "Type": "System.Int32",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
