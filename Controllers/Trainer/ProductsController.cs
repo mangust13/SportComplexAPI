@@ -20,7 +20,7 @@ namespace SportComplexAPI.Controllers.Trainer
         public async Task<IActionResult> GetProductsView()
         {
             var types = await _context.Products
-                .Select( p => p.ProductType.product_type_name)
+                .Select(p => p.ProductType.product_type_name)
                 .Distinct().ToListAsync();
 
             var products = await _context.Products

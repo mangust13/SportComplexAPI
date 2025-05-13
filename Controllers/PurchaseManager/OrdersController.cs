@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using SportComplexAPI.Data;
 using SportComplexAPI.DTOs.PurchaseManager;
+using SportComplexAPI.Models;
 
 namespace SportComplexAPI.Controllers.PurchaseManager
 {
@@ -144,6 +145,86 @@ namespace SportComplexAPI.Controllers.PurchaseManager
                 .ToListAsync();
 
             return Ok(brands);
+        }
+
+        public class OrderItemDTO
+        {
+            public int ProductId { get; set; }
+            public int SupplierId { get; set; }
+            public int Quantity { get; set; }
+            public string ProductModel { get; set; } = string.Empty;
+        }
+
+        [HttpPost("create-from-basket")]
+        public async Task<IActionResult> CreateFromBasket([FromBody] List<OrderItemDTO> items)
+        {
+            if (items == null || !items.Any())
+                return BadRequest("Порожній список замовлення.");
+
+            var groupedBySupplier = items.GroupBy(i => i.SupplierId);
+            var createdOrders = new List<object>();
+
+            foreach (var group in groupedBySupplier)
+            {
+                var supplierId = group.Key;
+
+                int maxOrderNumber = await _context.Orders.MaxAsync(o => (int?)o.order_number) ?? 0;
+
+                var order = new Order
+                {
+                    supplier_id = supplierId,
+                    order_date = DateTime.Now,
+                    order_number = maxOrderNumber + 1,
+                    order_status_id = await _context.OrderStatuses
+                        .Where(s => s.order_status_name == "В процесі")
+                        .Select(s => s.order_status_id)
+                        .FirstOrDefaultAsync(),
+                    payment_method_id = await _context.PaymentMethods
+                        .Select(p => p.payment_method_id)
+                        .FirstOrDefaultAsync()
+                };
+
+                _context.Orders.Add(order);
+                await _context.SaveChangesAsync();
+
+                var purchasedProducts = new List<PurchasedProduct>();
+
+                foreach (var item in group)
+                {
+                    var product = await _context.Products.FindAsync(item.ProductId);
+                    if (product == null) continue;
+
+                    // Витягуємо останню відому ціну з PurchasedProducts (якщо є), інакше ставимо 0
+                    var lastPrice = await _context.PurchasedProducts
+                        .Where(pp => pp.product_id == item.ProductId)
+                        .OrderByDescending(pp => pp.purchased_product_id)
+                        .Select(pp => pp.unit_price)
+                        .FirstOrDefaultAsync();
+
+                    purchasedProducts.Add(new PurchasedProduct
+                    {
+                        order_id = order.order_id,
+                        product_id = item.ProductId,
+                        quantity = item.Quantity,
+                        unit_price = lastPrice > 0 ? lastPrice : 0
+                    });
+                }
+
+                _context.PurchasedProducts.AddRange(purchasedProducts);
+
+                order.order_total_price = purchasedProducts.Sum(p => p.quantity * p.unit_price);
+                await _context.SaveChangesAsync();
+
+                createdOrders.Add(new
+                {
+                    order.order_id,
+                    order.order_number,
+                    order.order_date,
+                    order.order_total_price
+                });
+            }
+
+            return Ok(createdOrders);
         }
 
     }

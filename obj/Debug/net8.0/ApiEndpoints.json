@@ -247,6 +247,26 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "SportComplexAPI.Controllers.PurchaseManager.InventoryController",
+    "Method": "GetInventory",
+    "RelativePath": "api/Inventory",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[SportComplexAPI.DTOs.PurchaseManager.InventoryDto, SportComplexAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "SportComplexAPI.Controllers.PurchaseManager.OrdersController",
     "Method": "GetBrands",
     "RelativePath": "api/Orders/all-brands",
@@ -341,6 +361,22 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.PurchaseManager.OrdersController",
+    "Method": "CreateFromBasket",
+    "RelativePath": "api/Orders/create-from-basket",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "items",
+        "Type": "System.Collections.Generic.List\u00601[[SportComplexAPI.Controllers.PurchaseManager.OrdersController\u002BOrderItemDTO, SportComplexAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "SportComplexAPI.Controllers.Trainer.ProductsController",
