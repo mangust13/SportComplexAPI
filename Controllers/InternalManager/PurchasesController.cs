@@ -118,6 +118,7 @@ namespace SportComplexAPI.Controllers.InternalManager
                 ClientFullName = p.Client?.client_full_name ?? "—",
                 ClientGender = p.Client?.Gender?.gender_name ?? "—",
                 ClientPhoneNumber = p.Client?.client_phone_number ?? "—",
+                SubscriptionId = p.subscription_id,
                 SubscriptionName = p.Subscription?.subscription_name ?? "—",
                 SubscriptionTotalCost = p.Subscription?.subscription_total_cost ?? 0,
                 SubscriptionTerm = p.Subscription?.BaseSubscription?.SubscriptionTerm?.subscription_term ?? "—",
@@ -215,7 +216,9 @@ namespace SportComplexAPI.Controllers.InternalManager
 
             if (purchase == null) return NotFound($"Покупка з ID {purchaseId} не знайдена.");
 
-            var client = await _context.Clients.FindAsync(dto.ClientId);
+            var client = await _context.Clients
+                .Include(c => c.Gender)
+                .FirstOrDefaultAsync(c => c.client_id == dto.ClientId);
             if (client == null) return NotFound($"Клієнт з ID {dto.ClientId} не знайдений.");
 
             var paymentMethod = await _context.PaymentMethods.FirstOrDefaultAsync(pm => pm.payment_method == dto.PaymentMethod);
@@ -227,8 +230,11 @@ namespace SportComplexAPI.Controllers.InternalManager
             purchase.client_id = client.client_id;
             purchase.payment_method_id = paymentMethod.payment_method_id;
             purchase.subscription_id = subscription.subscription_id;
+            purchase.purchase_date = dto.PurchaseDate;
+            subscription.subscription_total_cost = dto.SubscriptionTotalCost;
 
             await _context.SaveChangesAsync();
+
 
             var attendanceCount = await _context.AttendanceRecords
                 .Where(ar => ar.purchase_id == purchaseId)
@@ -243,6 +249,7 @@ namespace SportComplexAPI.Controllers.InternalManager
                 ClientFullName = client.client_full_name ?? "—",
                 ClientGender = client.Gender.gender_name,
                 ClientPhoneNumber = client.client_phone_number ?? "—",
+                SubscriptionId = subscription.subscription_id,
                 SubscriptionName = subscription.subscription_name ?? "—",
                 SubscriptionTotalCost = subscription.subscription_total_cost,
                 SubscriptionTerm = subscription.BaseSubscription?.SubscriptionTerm?.subscription_term ?? "—",
@@ -259,6 +266,10 @@ namespace SportComplexAPI.Controllers.InternalManager
                 TotalAttendances = attendanceCount
             };
 
+            var userName = Request.Headers["X-User-Name"].FirstOrDefault() ?? "Anonymous";
+            var roleName = Request.Headers["X-User-Role"].FirstOrDefault() ?? "Unknown";
+            LogService.LogAction(userName, roleName, $"Змінив покупку (ID: {purchaseId})");
+
             return Ok(updatedDto);
         }
 
@@ -268,6 +279,8 @@ namespace SportComplexAPI.Controllers.InternalManager
             public int ClientId { get; set; }
             public string PaymentMethod { get; set; }
             public int SubscriptionId { get; set; }
+            public DateTime PurchaseDate { get; set; }
+            public decimal SubscriptionTotalCost { get; set; }
         }
 
         [HttpGet("subscriptions-names")]
@@ -276,6 +289,7 @@ namespace SportComplexAPI.Controllers.InternalManager
             var subscriptions = await _context.Subscriptions
                 .Select(s => new
                 {
+                    Id = s.subscription_id,
                     Name = s.subscription_name,
                     TotalCost = s.subscription_total_cost
                 })

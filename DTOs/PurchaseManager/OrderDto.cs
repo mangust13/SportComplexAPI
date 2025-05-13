@@ -32,6 +32,4 @@ namespace SportComplexAPI.DTOs.PurchaseManager
         public int DeliveredQuantity { get; set; }
         public int GymNumber { get; set; }
     }
-
-
 }

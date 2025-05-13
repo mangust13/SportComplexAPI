@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SportComplexAPI.Data;
 using SportComplexAPI.DTOs.InternalManager;
 using SportComplexAPI.Models;
+using SportComplexAPI.Services;
 
 namespace SportComplexAPI.Controllers.InternalManager
 {
@@ -28,23 +29,14 @@ namespace SportComplexAPI.Controllers.InternalManager
                     .ThenInclude(sc => sc.City)
                 .AsQueryable();
 
-            // Фільтр по статі
             if (!string.IsNullOrEmpty(gender))
-            {
                 query = query.Where(t => t.Gender.gender_name == gender);
-            }
 
-            // Фільтр по містах
             if (cities != null && cities.Any())
-            {
                 query = query.Where(t => cities.Contains(t.SportComplex.City.city_name));
-            }
 
-            // Фільтр по адресах
             if (addresses != null && addresses.Any())
-            {
                 query = query.Where(t => addresses.Contains(t.SportComplex.complex_address));
-            }
 
             var trainers = await query.ToListAsync();
             var trainerIds = trainers.Select(t => t.trainer_id).ToList();
@@ -120,7 +112,6 @@ namespace SportComplexAPI.Controllers.InternalManager
             return Ok(result);
         }
 
-
         public class AddTrainerDto
         {
             public string TrainerFullName { get; set; } = null!;
@@ -180,24 +171,64 @@ namespace SportComplexAPI.Controllers.InternalManager
             if (trainer == null)
                 return NotFound($"Тренера з ID {id} не знайдено.");
 
-            // Видалення зв'язків у TrainerActivities
+            var trainerSchedules = await _context.TrainerSchedules
+                .Where(ts => ts.trainer_id == id)
+                .ToListAsync();
+
+            var scheduleIds = trainerSchedules.Select(ts => ts.schedule_id).ToList();
+
+            var trainings = await _context.Trainings
+                .Where(t => scheduleIds.Contains(t.trainer_schedule_id))
+                .ToListAsync();
+            _context.Trainings.RemoveRange(trainings);
+
             var trainerActivities = await _context.TrainerActivities
                 .Where(ta => ta.trainer_id == id)
                 .ToListAsync();
             _context.TrainerActivities.RemoveRange(trainerActivities);
 
-            // Видалення зв'язків у TrainerSchedules
-            var trainerSchedules = await _context.TrainerSchedules
-                .Where(ts => ts.trainer_id == id)
-                .ToListAsync();
             _context.TrainerSchedules.RemoveRange(trainerSchedules);
-
-            // Видалення самого тренера
             _context.Trainers.Remove(trainer);
             await _context.SaveChangesAsync();
 
+            var userName = Request.Headers["X-User-Name"].FirstOrDefault() ?? "Anonymous";
+            var roleName = Request.Headers["X-User-Role"].FirstOrDefault() ?? "Unknown";
+            LogService.LogAction(userName, roleName, $"Видалив дані тренера (ID: {id})");
             return Ok(new { Message = "Тренера успішно видалено!" });
         }
+
+        public class UpdateTrainerDto
+        {
+            public string TrainerFullName { get; set; } = null!;
+            public string TrainerPhoneNumber { get; set; } = null!;
+            public string Gender { get; set; } = null!;
+            public int SportComplexId { get; set; }
+        }
+
+        [HttpPut("{trainerId}")]
+        public async Task<IActionResult> UpdateTrainer(int trainerId, [FromBody] UpdateTrainerDto dto)
+        {
+            var trainer = await _context.Trainers.FindAsync(trainerId);
+            if (trainer == null) return NotFound();
+
+            var gender = await _context.Genders.FirstOrDefaultAsync(g => g.gender_name == dto.Gender);
+            if (gender == null) return BadRequest("Невідома стать");
+
+            var complex = await _context.SportComplexes.FindAsync(dto.SportComplexId);
+            if (complex == null) return BadRequest("Невідомий спорткомплекс");
+
+            trainer.trainer_full_name = dto.TrainerFullName;
+            trainer.trainer_phone_number = dto.TrainerPhoneNumber;
+            trainer.trainer_gender_id = gender.gender_id;
+            trainer.sport_complex_id = complex.sport_complex_id;
+
+            var userName = Request.Headers["X-User-Name"].FirstOrDefault() ?? "Anonymous";
+            var roleName = Request.Headers["X-User-Role"].FirstOrDefault() ?? "Unknown";
+            LogService.LogAction(userName, roleName, $"Змінив дані тренера (ID: {trainerId})");
+            await _context.SaveChangesAsync();
+            return Ok("Тренера оновлено");
+        }
+
 
         //SCHEDULE
         public class AddTrainerScheduleDto

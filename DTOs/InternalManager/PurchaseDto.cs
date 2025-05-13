@@ -19,7 +19,7 @@ namespace SportComplexAPI.DTOs.InternalManager
         public string ClientFullName { get; set; }
         public string ClientGender { get; set; }
         public string ClientPhoneNumber { get; set; }
-
+        public int SubscriptionId { get; set; }
         public string SubscriptionName { get; set; }
         public decimal SubscriptionTotalCost { get; set; }
         public string SubscriptionTerm { get; set; }

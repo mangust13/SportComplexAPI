@@ -74,8 +74,11 @@ namespace SportComplexAPI.Controllers.InternalManager
             activity.activity_name = dto.ActivityName;
             activity.activity_price = dto.ActivityPrice;
             activity.activity_description = dto.ActivityDescription;
-
             await _context.SaveChangesAsync();
+
+            var userName = Request.Headers["X-User-Name"].FirstOrDefault() ?? "Anonymous";
+            var roleName = Request.Headers["X-User-Role"].FirstOrDefault() ?? "Unknown";
+            LogService.LogAction(userName, roleName, $"Змінив активність (ID: {id})");
 
             return Ok(new
             {
@@ -102,6 +105,5 @@ namespace SportComplexAPI.Controllers.InternalManager
 
             return Ok(new { message = "Активність успішно видалена." });
         }
-
     }
 }

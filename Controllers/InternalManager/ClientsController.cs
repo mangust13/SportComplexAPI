@@ -60,7 +60,6 @@ namespace SportComplexAPI.Controllers.InternalManager
 
             var userName = Request.Headers["X-User-Name"].FirstOrDefault() ?? "Anonymous";
             var roleName = Request.Headers["X-User-Role"].FirstOrDefault() ?? "Unknown";
-
             LogService.LogAction(userName, roleName, $"Додав нового клієнта (ID: {client.client_id})");
 
             return Ok(new
@@ -87,8 +86,11 @@ namespace SportComplexAPI.Controllers.InternalManager
             client.client_full_name = dto.ClientFullName;
             client.client_phone_number = dto.ClientPhoneNumber;
             client.client_gender_id = gender.gender_id;
-
             await _context.SaveChangesAsync();
+
+            var userName = Request.Headers["X-User-Name"].FirstOrDefault() ?? "Anonymous";
+            var roleName = Request.Headers["X-User-Role"].FirstOrDefault() ?? "Unknown";
+            LogService.LogAction(userName, roleName, $"Змінив клієнта (ID: {id})");
 
             return Ok(new
             {

@@ -15,4 +15,11 @@ namespace SportComplexAPI.DTOs.InternalManager
         public string? ActivityDescription { get; set; }
         public int ActivityTypeAmount { get; set; }
     }
+
+    public class ActivityCreateUpdateDTO
+    {
+        public string ActivityName { get; set; } = null!;
+        public decimal ActivityPrice { get; set; }
+        public string? ActivityDescription { get; set; }
+    }
 }

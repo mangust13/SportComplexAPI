@@ -15,6 +15,14 @@ namespace SportComplexAPI.DTOs.InternalManager
         public string SubscriptionTerm { get; set; }
         public string SubscriptionVisitTime { get; set; }
         public List<ActivityDto> Activities { get; set; } = new();
-
     }
+
+    public class SubscriptionUpdateDto
+    {
+        public decimal SubscriptionTotalCost { get; set; }
+        public string SubscriptionTerm { get; set; } = null!;
+        public string SubscriptionVisitTime { get; set; } = null!;
+        public List<ActivityDto> Activities { get; set; } = new();
+    }
+
 }

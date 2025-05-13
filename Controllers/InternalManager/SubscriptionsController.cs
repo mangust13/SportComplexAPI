@@ -186,6 +186,53 @@ namespace SportComplexAPI.Controllers.InternalManager
             return Ok(new { Message = $"Абонемент з Id {subscriptionId} та всі пов’язані активності видалені." });
         }
 
+        [HttpPut("{subscriptionId}")]
+        public async Task<IActionResult> UpdateSubscription(int subscriptionId, [FromBody] SubscriptionUpdateDto dto)
+        {
+            var subscription = await _context.Subscriptions
+                .Include(s => s.BaseSubscription)
+                .Include(s => s.SubscriptionActivities)
+                .FirstOrDefaultAsync(s => s.subscription_id == subscriptionId);
+
+            if (subscription == null)
+                return NotFound("Абонемент не знайдено");
+
+            var baseSub = await _context.BaseSubscriptions
+                .Include(bs => bs.SubscriptionTerm)
+                .Include(bs => bs.SubscriptionVisitTime)
+                .FirstOrDefaultAsync(bs =>
+                    bs.SubscriptionTerm.subscription_term == dto.SubscriptionTerm &&
+                    bs.SubscriptionVisitTime.subscription_visit_time == dto.SubscriptionVisitTime);
+
+            if (baseSub == null)
+                return BadRequest("Базовий абонемент не знайдено");
+
+            subscription.base_subscription_id = baseSub.base_subscription_id;
+            subscription.subscription_total_cost = dto.SubscriptionTotalCost;
+
+            // Оновлення активностей
+            _context.SubscriptionActivities.RemoveRange(subscription.SubscriptionActivities);
+            foreach (var act in dto.Activities)
+            {
+                var activity = await _context.Activities.FirstOrDefaultAsync(a => a.activity_name == act.ActivityName);
+                if (activity == null)
+                    return BadRequest($"Активність '{act.ActivityName}' не знайдена");
+
+                _context.SubscriptionActivities.Add(new SubscriptionActivity
+                {
+                    subscription_id = subscription.subscription_id,
+                    activity_id = activity.activity_id,
+                    activity_type_amount = act.ActivityTypeAmount
+                });
+            }
+
+            var userName = Request.Headers["X-User-Name"].FirstOrDefault() ?? "Anonymous";
+            var roleName = Request.Headers["X-User-Role"].FirstOrDefault() ?? "Unknown";
+            LogService.LogAction(userName, roleName, $"Змінив абонемент (ID: {subscriptionId})");
+
+            await _context.SaveChangesAsync();
+            return Ok("Абонемент оновлено");
+        }
 
         private async Task<string> GenerateUniqueSubscriptionName(string visitTime, decimal totalCost, List<string> activityNames)
         {
