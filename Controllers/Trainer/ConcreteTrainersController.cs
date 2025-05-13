@@ -117,7 +117,7 @@ namespace SportComplexAPI.Controllers.Trainer
                             .ThenInclude(bs => bs.SubscriptionTerm)
                 .Include(c => c.Purchases)
                     .ThenInclude(p => p.AttendanceRecords)
-                .ToListAsync(); // ← до цього моменту EF може все згенерувати
+                .ToListAsync();
 
             var result = clients
                 .Where(c => c.Purchases.Any(p =>
@@ -229,6 +229,41 @@ namespace SportComplexAPI.Controllers.Trainer
             await _context.SaveChangesAsync();
 
             return Ok(new { message = "Відвідування успішно додано." });
+        }
+
+        [HttpGet("{trainerId}/activity-in-gyms")]
+        public async Task<IActionResult> GetTrainerActivityInGyms(int trainerId)
+        {
+            var trainer = await _context.Trainers
+                .Include(t => t.SportComplex)
+                .FirstOrDefaultAsync(t => t.trainer_id == trainerId);
+
+            if (trainer == null)
+                return NotFound();
+
+            var gymIds = await _context.Gyms
+                .Where(g => g.sport_complex_id == trainer.sport_complex_id)
+                .Select(g => g.gym_id)
+                .ToListAsync();
+
+            var activities = await _context.TrainerActivities
+                .Where(ta => ta.trainer_id == trainerId)
+                .Select(ta => ta.activity_id)
+                .ToListAsync();
+
+            var results = await _context.ActivityInGyms
+                .Where(aig => gymIds.Contains(aig.gym_id) && activities.Contains(aig.activity_id))
+                .Include(aig => aig.Gym)
+                .Include(aig => aig.Activity)
+                .Select(aig => new
+                {
+                    ActivityInGymId = aig.activity_in_gym_id,
+                    ActivityName = aig.Activity.activity_name,
+                    GymNumber = aig.Gym.gym_number
+                })
+                .ToListAsync();
+
+            return Ok(results);
         }
 
     }

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SportComplexAPI.Data;
 using SportComplexAPI.DTOs;
 using SportComplexAPI.Models;
+using SportComplexAPI.Services;
 
 namespace SportComplexAPI.Controllers.Trainer
 {
@@ -40,9 +41,7 @@ namespace SportComplexAPI.Controllers.Trainer
                 .AsQueryable();
 
             if (date.HasValue)
-            {
                 query = query.Where(a => a.attendance_date_time.Date == date.Value.Date);
-            }
 
             if (!string.IsNullOrEmpty(activities))
             {
@@ -100,5 +99,64 @@ namespace SportComplexAPI.Controllers.Trainer
 
             return Ok(attendances);
         }
+
+        public class UpdateAttendanceDto
+        {
+            public int AttendanceId { get; set; }
+            public DateTime AttendanceDateTime { get; set; }
+            public int ActivityInGymId { get; set; }
+        }
+
+
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateAttendance([FromBody] UpdateAttendanceDto dto)
+        {
+            var attendance = await _context.AttendanceRecords
+                .Include(a => a.Training)
+                    .ThenInclude(t => t.TrainerSchedule)
+                        .ThenInclude(ts => ts.Schedule)
+                .FirstOrDefaultAsync(a => a.attendance_id == dto.AttendanceId);
+
+            if (attendance == null)
+                return NotFound("Відвідування не знайдено");
+
+            var existingSchedule = attendance.Training.TrainerSchedule;
+            existingSchedule.activity_in_gym_id = dto.ActivityInGymId;
+            attendance.attendance_date_time = dto.AttendanceDateTime;
+
+            await _context.SaveChangesAsync();
+
+            var userName = Request.Headers["X-User-Name"].FirstOrDefault() ?? "Anonymous";
+            var roleName = Request.Headers["X-User-Role"].FirstOrDefault() ?? "Unknown";
+            LogService.LogAction(userName, roleName, $"Змінив відвідування (ID: {dto.AttendanceId})");
+
+            return Ok("Відвідування оновлено");
+        }
+
+
+        [HttpDelete("{attendanceId}")]
+        public async Task<IActionResult> DeleteAttendance(int attendanceId)
+        {
+            var attendance = await _context.AttendanceRecords
+                .Include(a => a.Training)
+                .FirstOrDefaultAsync(a => a.attendance_id == attendanceId);
+
+            if (attendance == null)
+                return NotFound("Відвідування не знайдено");
+
+            var training = attendance.Training;
+
+            _context.AttendanceRecords.Remove(attendance);
+
+            await _context.SaveChangesAsync();
+
+            var userName = Request.Headers["X-User-Name"].FirstOrDefault() ?? "Anonymous";
+            var roleName = Request.Headers["X-User-Role"].FirstOrDefault() ?? "Unknown";
+            LogService.LogAction(userName, roleName, $"Видалив відвідування (ID: {attendanceId})");
+
+            return Ok("Відвідування видалено");
+        }
+
+
     }
 }

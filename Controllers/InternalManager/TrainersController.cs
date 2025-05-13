@@ -303,6 +303,10 @@ namespace SportComplexAPI.Controllers.InternalManager
             _context.TrainerSchedules.Add(trainerSchedule);
             await _context.SaveChangesAsync();
 
+            var userName = Request.Headers["X-User-Name"].FirstOrDefault() ?? "Anonymous";
+            var roleName = Request.Headers["X-User-Role"].FirstOrDefault() ?? "Unknown";
+            LogService.LogAction(userName, roleName, $"Додав запис в розклад тренера (ID: {trainerSchedule.trainer_schedule_id})");
+
             return Ok(new { Message = "Запис у розклад успішно додано!",
                 ScheduleId = trainerSchedule.schedule_id
             });
@@ -323,6 +327,72 @@ namespace SportComplexAPI.Controllers.InternalManager
 
             await _context.SaveChangesAsync();
             return Ok(new { Message = "Запис успішно видалено!" });
+        }
+
+        public class UpdateTrainerScheduleDto
+        {
+            public int ScheduleId { get; set; }
+            public string DayName { get; set; } = null!;
+            public int ActivityId { get; set; }
+            public string StartTime { get; set; } = null!;
+            public string EndTime { get; set; } = null!;
+        }
+
+        [HttpPut("TrainerSchedules/{scheduleId}")]
+        public async Task<IActionResult> UpdateTrainerSchedule(int scheduleId, [FromBody] UpdateTrainerScheduleDto dto)
+        {
+            var trainerSchedule = await _context.TrainerSchedules
+                .Include(ts => ts.Schedule)
+                .FirstOrDefaultAsync(ts => ts.schedule_id == scheduleId);
+
+            if (trainerSchedule == null)
+                return NotFound($"Розклад з ID {scheduleId} не знайдено.");
+
+            var dayOfWeek = await _context.DaysOfWeek.FirstOrDefaultAsync(d => d.day_name == dto.DayName);
+            if (dayOfWeek == null)
+                return BadRequest("Некоректний день тижня.");
+
+            var newStart = TimeSpan.Parse(dto.StartTime);
+            var newEnd = TimeSpan.Parse(dto.EndTime);
+            if (newStart >= newEnd)
+                return BadRequest("Час завершення повинен бути після часу початку.");
+
+            var trainerId = trainerSchedule.trainer_id;
+            var existingSchedules = await _context.TrainerSchedules
+                .Where(ts => ts.trainer_id == trainerId && ts.schedule_id != scheduleId)
+                .Include(ts => ts.Schedule)
+                .Where(ts => ts.Schedule.day_id == dayOfWeek.day_id)
+                .ToListAsync();
+
+            bool hasOverlap = existingSchedules.Any(ts =>
+                !(newEnd <= ts.Schedule.start_time || newStart >= ts.Schedule.end_time));
+
+            if (hasOverlap)
+                return BadRequest("У цей час тренер вже має інше заняття.");
+
+            var activityInGym = await _context.ActivityInGyms
+                .FirstOrDefaultAsync(aig =>
+                    aig.activity_id == dto.ActivityId &&
+                    aig.gym_id == _context.TrainerSchedules
+                        .Where(ts => ts.schedule_id == scheduleId)
+                        .Select(ts => ts.ActivityInGym.gym_id)
+                        .FirstOrDefault());
+
+            if (activityInGym == null)
+                return BadRequest("Активність недоступна в цьому спорткомплексі.");
+
+            trainerSchedule.Schedule.day_id = dayOfWeek.day_id;
+            trainerSchedule.Schedule.start_time = newStart;
+            trainerSchedule.Schedule.end_time = newEnd;
+            trainerSchedule.activity_in_gym_id = activityInGym.activity_in_gym_id;
+
+            await _context.SaveChangesAsync();
+
+            var userName = Request.Headers["X-User-Name"].FirstOrDefault() ?? "Anonymous";
+            var roleName = Request.Headers["X-User-Role"].FirstOrDefault() ?? "Unknown";
+            LogService.LogAction(userName, roleName, $"Оновив запис розкладу тренера (ID: {scheduleId})");
+
+            return Ok("Розклад оновлено.");
         }
 
 

@@ -64,6 +64,22 @@
   },
   {
     "ContainingType": "SportComplexAPI.Controllers.Trainer.AttendanceRecordController",
+    "Method": "DeleteAttendance",
+    "RelativePath": "api/AttendanceRecord/{attendanceId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "attendanceId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.Trainer.AttendanceRecordController",
     "Method": "GetAttendanceForTrainer",
     "RelativePath": "api/AttendanceRecord/attendances",
     "HttpMethod": "GET",
@@ -99,6 +115,22 @@
         "Name": "purchaseNumber",
         "Type": "System.String",
         "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.Trainer.AttendanceRecordController",
+    "Method": "UpdateAttendance",
+    "RelativePath": "api/AttendanceRecord/update",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "SportComplexAPI.Controllers.Trainer.AttendanceRecordController\u002BUpdateAttendanceDto",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []
@@ -192,6 +224,22 @@
     "Parameters": [
       {
         "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.Trainer.ConcreteTrainersController",
+    "Method": "GetTrainerActivityInGyms",
+    "RelativePath": "api/ConcreteTrainers/{trainerId}/activity-in-gyms",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "trainerId",
         "Type": "System.Int32",
         "IsRequired": true
       }
@@ -379,7 +427,60 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SportComplexAPI.Controllers.ProductsController",
+    "ContainingType": "SportComplexAPI.Controllers.PurchaseManager.ProductsController",
+    "Method": "CreateProduct",
+    "RelativePath": "api/Products",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "SportComplexAPI.Controllers.PurchaseManager.ProductsController\u002BCreateUpdateProductDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.PurchaseManager.ProductsController",
+    "Method": "UpdateProduct",
+    "RelativePath": "api/Products/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "SportComplexAPI.Controllers.PurchaseManager.ProductsController\u002BCreateUpdateProductDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.PurchaseManager.ProductsController",
+    "Method": "DeleteProduct",
+    "RelativePath": "api/Products/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.PurchaseManager.ProductsController",
     "Method": "GetBrands",
     "RelativePath": "api/Products/all-brands",
     "HttpMethod": "GET",
@@ -389,7 +490,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SportComplexAPI.Controllers.ProductsController",
+    "ContainingType": "SportComplexAPI.Controllers.PurchaseManager.ProductsController",
     "Method": "GetTypes",
     "RelativePath": "api/Products/all-types",
     "HttpMethod": "GET",
@@ -399,7 +500,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "SportComplexAPI.Controllers.ProductsController",
+    "ContainingType": "SportComplexAPI.Controllers.PurchaseManager.ProductsController",
     "Method": "GetProductsView",
     "RelativePath": "api/Products/products-view",
     "HttpMethod": "GET",
@@ -717,6 +818,27 @@
   },
   {
     "ContainingType": "SportComplexAPI.Controllers.PurchaseManager.SuppliersController",
+    "Method": "UpdateSupplier",
+    "RelativePath": "api/Suppliers/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "SportComplexAPI.Controllers.PurchaseManager.SuppliersController\u002BSupplierFullDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.PurchaseManager.SuppliersController",
     "Method": "GetAllSuppliers",
     "RelativePath": "api/Suppliers/all",
     "HttpMethod": "GET",
@@ -857,6 +979,27 @@
       {
         "Name": "scheduleId",
         "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.InternalManager.TrainersController",
+    "Method": "UpdateTrainerSchedule",
+    "RelativePath": "api/Trainers/TrainerSchedules/{scheduleId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "scheduleId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "SportComplexAPI.Controllers.InternalManager.TrainersController\u002BUpdateTrainerScheduleDto",
         "IsRequired": true
       }
     ],
