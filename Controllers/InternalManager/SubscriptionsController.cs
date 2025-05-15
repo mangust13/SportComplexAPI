@@ -157,7 +157,6 @@ namespace SportComplexAPI.Controllers.InternalManager
             var userName = Request.Headers["X-User-Name"].FirstOrDefault() ?? "Anonymous";
             var roleName = Request.Headers["X-User-Role"].FirstOrDefault() ?? "Unknown";
 
-            // Логування
             LogService.LogAction(userName, roleName, $"Створив новий абонемент");
 
             return Ok(new { message = "Абонемент успішно створено." });
@@ -210,7 +209,6 @@ namespace SportComplexAPI.Controllers.InternalManager
             subscription.base_subscription_id = baseSub.base_subscription_id;
             subscription.subscription_total_cost = dto.SubscriptionTotalCost;
 
-            // Оновлення активностей
             _context.SubscriptionActivities.RemoveRange(subscription.SubscriptionActivities);
             foreach (var act in dto.Activities)
             {
@@ -254,7 +252,6 @@ namespace SportComplexAPI.Controllers.InternalManager
 
             string baseName = $"{part1} {part2} {part3}";
 
-            // Завантажуємо всі існуючі підписки з такою базовою назвою
             var existingNames = await _context.Subscriptions
                 .Where(s => s.subscription_name.StartsWith(baseName))
                 .Select(s => s.subscription_name)

@@ -57,12 +57,14 @@ namespace SportComplexAPI.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<SubscriptionActivity>()
+                .ToTable(tb => tb.HasTrigger("trg_UpdateSubscriptionTotal"));
 
             modelBuilder.Entity<Delivery>()
-                .ToTable(tb => tb.HasTrigger("trg_UpdateOrderStatus")); // 👈 твій тригер
+                .ToTable(tb => tb.HasTrigger("trg_UpdateOrderStatus"));
 
             modelBuilder.Entity<Delivery>()
-                .ToTable(tb => tb.HasTrigger("trg_UpdateInventoryQuantity")); // 👈 якщо є ще
+                .ToTable(tb => tb.HasTrigger("trg_UpdateInventoryQuantity"));
         }
 
     }
