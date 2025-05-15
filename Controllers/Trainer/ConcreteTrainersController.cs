@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using SportComplexAPI.Data;
 using SportComplexAPI.Models;
+using SportComplexAPI.DTOs.Trainer;
 
 namespace SportComplexAPI.Controllers.Trainer
 {
@@ -14,6 +15,7 @@ namespace SportComplexAPI.Controllers.Trainer
         {
             _context = context;
         }
+
         [HttpGet("{trainerId}/profile")]
         public async Task<IActionResult> GetTrainerProfile(int trainerId)
         {
@@ -25,7 +27,6 @@ namespace SportComplexAPI.Controllers.Trainer
             if (trainer == null)
                 return NotFound("Trainer not found");
 
-            // Завантажити розклади ТІЛЬКИ для цього тренера окремо
             var trainerSchedules = await _context.TrainerSchedules
                 .Where(ts => ts.trainer_id == trainerId)
                 .Include(ts => ts.Schedule)
@@ -71,37 +72,7 @@ namespace SportComplexAPI.Controllers.Trainer
 
             return Ok(profileDto);
         }
-
-
-        public class TrainerProfileDto
-        {
-            public string TrainerFullName { get; set; } = null!;
-            public int GymNumber { get; set; }
-
-            public List<ActivityDto> Activities { get; set; } = new();
-            public List<TrainerScheduleEntryDto> Schedules { get; set; } = new();
-        }
-
-        public class ActivityDto
-        {
-            public int ActivityId { get; set; }
-            public string ActivityName { get; set; } = null!;
-        }
-
-        public class TrainerScheduleEntryDto
-        {
-            public int TrainerScheduleId { get; set; }
-            public int ScheduleId { get; set; }
-            public string DayName { get; set; } = null!;
-            public string StartTime { get; set; } = null!;
-            public string EndTime { get; set; } = null!;
-            public int ActivityId { get; set; }
-            public string ActivityName { get; set; } = null!;
-            public int GymNumber { get; set; }
-            public string SportComplexAddress { get; set; } = null!;
-            public string SportComplexCity { get; set; } = null!;
-            public int TrainerId { get; set; }
-        }
+        
 
         [HttpGet("eligible-clients")]
         public async Task<IActionResult> GetEligibleClientsForSchedule([FromQuery] int activityId)
@@ -150,23 +121,6 @@ namespace SportComplexAPI.Controllers.Trainer
             return Ok(result);
         }
 
-
-        public class ClientWithPurchasesDto
-        {
-            public int ClientId { get; set; }
-            public string ClientFullName { get; set; } = null!;
-            public string ClientPhoneNumber { get; set; } = null!;
-            public string ClientGender { get; set; } = null!;
-            public List<PurchaseShortDto> Purchases { get; set; } = new();
-        }
-
-        public class PurchaseShortDto
-        {
-            public int PurchaseId { get; set; }
-            public int PurchaseNumber { get; set; }
-            public string SubscriptionName { get; set; } = null!;
-        }
-
         private bool IsExpired(Purchase p)
         {
             var termText = p.Subscription.BaseSubscription.SubscriptionTerm.subscription_term.ToLower();
@@ -186,12 +140,7 @@ namespace SportComplexAPI.Controllers.Trainer
             return total > used;
         }
 
-        public class AddAttendanceDto
-        {
-            public int ClientId { get; set; }
-            public int PurchaseId { get; set; }
-            public int TrainerScheduleId { get; set; }
-        }
+        
 
         [HttpPost("add-attendance")]
         public async Task<IActionResult> AddAttendance([FromBody] AddAttendanceDto dto)

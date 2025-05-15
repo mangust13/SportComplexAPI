@@ -631,7 +631,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/SupplierFilltrationDto"
+                    "$ref": "#/components/schemas/SupplierDto"
                   }
                 }
               },
@@ -639,7 +639,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/SupplierFilltrationDto"
+                    "$ref": "#/components/schemas/SupplierDto"
                   }
                 }
               },
@@ -647,7 +647,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/SupplierFilltrationDto"
+                    "$ref": "#/components/schemas/SupplierDto"
                   }
                 }
               }
@@ -703,9 +703,94 @@
           "content": {
             "application/json": {
               "schema": {
+                "$ref": "#/components/schemas/OrderFromBasketDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderFromBasketDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderFromBasketDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Orders/add-delivery": {
+      "post": {
+        "tags": [
+          "Orders"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddDeliveryDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddDeliveryDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddDeliveryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Orders/gyms": {
+      "get": {
+        "tags": [
+          "Orders"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Orders/update-products/{orderId}": {
+      "put": {
+        "tags": [
+          "Orders"
+        ],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/OrderItemDTO"
+                  "$ref": "#/components/schemas/UpdatePurchasedProductDto"
                 }
               }
             },
@@ -713,7 +798,7 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/OrderItemDTO"
+                  "$ref": "#/components/schemas/UpdatePurchasedProductDto"
                 }
               }
             },
@@ -721,7 +806,7 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/OrderItemDTO"
+                  "$ref": "#/components/schemas/UpdatePurchasedProductDto"
                 }
               }
             }
@@ -1732,6 +1817,28 @@
         },
         "additionalProperties": false
       },
+      "AddDeliveryDto": {
+        "type": "object",
+        "properties": {
+          "purchasedProductId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gymId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "deliveryDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deliveredQuantity": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "AddTrainerDto": {
         "type": "object",
         "properties": {
@@ -1860,6 +1967,14 @@
           "gymNumber": {
             "type": "integer",
             "format": "int32"
+          },
+          "complexAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "complexCity": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -1961,6 +2076,23 @@
         },
         "additionalProperties": false
       },
+      "OrderFromBasketDto": {
+        "type": "object",
+        "properties": {
+          "supplierId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderItemDTO"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "OrderItemDTO": {
         "type": "object",
         "properties": {
@@ -1979,6 +2111,10 @@
           "productModel": {
             "type": "string",
             "nullable": true
+          },
+          "unitPrice": {
+            "type": "number",
+            "format": "double"
           }
         },
         "additionalProperties": false
@@ -2031,6 +2167,10 @@
         "type": "object",
         "properties": {
           "purchasedProductId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "productId": {
             "type": "integer",
             "format": "int32"
           },
@@ -2140,7 +2280,7 @@
         },
         "additionalProperties": false
       },
-      "SupplierFilltrationDto": {
+      "SupplierDto": {
         "type": "object",
         "properties": {
           "supplierId": {
@@ -2188,6 +2328,24 @@
             "format": "date-time"
           },
           "activityInGymId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdatePurchasedProductDto": {
+        "type": "object",
+        "properties": {
+          "purchasedProductId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "productId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "quantity": {
             "type": "integer",
             "format": "int32"
           }

@@ -11,6 +11,7 @@ namespace SportComplexAPI.Data
         public SportComplexContext(DbContextOptions<SportComplexContext> options)
             : base(options) { }
 
+
         //Authorization
         public DbSet<User> Users { get; set; } = null!;
         public DbSet<UserRole> UserRoles { get; set; } = null!;
@@ -52,5 +53,17 @@ namespace SportComplexAPI.Data
         public DbSet<Inventory> Inventory { get; set; } = null!;
         public DbSet<Delivery> Deliveries { get; set; } = null!;
         public DbSet<AttendanceRecord> AttendanceRecords { get; set; } = null!;
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Delivery>()
+                .ToTable(tb => tb.HasTrigger("trg_UpdateOrderStatus")); // 👈 твій тригер
+
+            modelBuilder.Entity<Delivery>()
+                .ToTable(tb => tb.HasTrigger("trg_UpdateInventoryQuantity")); // 👈 якщо є ще
+        }
+
     }
 }

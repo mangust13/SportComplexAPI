@@ -2,7 +2,7 @@
 {
     public static class LogService
     {
-        private static readonly string logFilePath = "Log.txt"; // можна винести в конфіг
+        private static readonly string logFilePath = "Log.txt";
 
         public static void LogAction(string userName, string roleName, string actionDescription)
         {

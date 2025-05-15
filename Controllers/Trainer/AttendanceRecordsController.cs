@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SportComplexAPI.Data;
-using SportComplexAPI.DTOs;
+using SportComplexAPI.DTOs.Trainer;
 using SportComplexAPI.Models;
 using SportComplexAPI.Services;
 
@@ -19,12 +19,9 @@ namespace SportComplexAPI.Controllers.Trainer
 
         [HttpGet("attendances")]
         public async Task<IActionResult> GetAttendanceForTrainer(
-            [FromQuery] int trainerId,
-            [FromQuery] DateTime? date = null,
-            [FromQuery] string? activities = null,
-            [FromQuery] string? sortBy = null,
-            [FromQuery] string? order = null,
-            [FromQuery] string? purchaseNumber = null)
+            [FromQuery] int trainerId, [FromQuery] DateTime? date = null,
+            [FromQuery] string? activities = null, [FromQuery] string? sortBy = null,
+            [FromQuery] string? order = null, [FromQuery] string? purchaseNumber = null)
         {
             var query = _context.AttendanceRecords
                 .Include(a => a.Purchase)
@@ -51,10 +48,7 @@ namespace SportComplexAPI.Controllers.Trainer
             }
 
             if (int.TryParse(purchaseNumber, out var purchaseNum))
-            {
                 query = query.Where(a => a.Purchase.purchase_number == purchaseNum);
-            }
-
 
             // Сортування
             if (!string.IsNullOrEmpty(sortBy))
@@ -68,8 +62,8 @@ namespace SportComplexAPI.Controllers.Trainer
                 else if (sortBy == "attendanceDateTime")
                 {
                     query = order == "asc"
-                        ? query.OrderBy(a => a.Purchase.purchase_date)
-                        : query.OrderByDescending(a => a.Purchase.purchase_date);
+                        ? query.OrderBy(a => a.attendance_date_time)
+                        : query.OrderByDescending(a => a.attendance_date_time);
                 }
             }
 

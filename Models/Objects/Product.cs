@@ -22,5 +22,7 @@ namespace SportComplexAPI.Models
 
         public Brand Brand { get; set; }
         public ProductType ProductType { get; set; }
+
+        public ICollection<PurchasedProduct> PurchasedProducts { get; set; }
     }
 }

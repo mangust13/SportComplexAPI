@@ -26,7 +26,6 @@ namespace SportComplexAPI.Models
         public Subscription Subscription { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
         public ICollection<AttendanceRecord> AttendanceRecords { get; set; }
-
     }
 
 }

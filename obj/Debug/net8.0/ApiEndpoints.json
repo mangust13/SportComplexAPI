@@ -272,7 +272,7 @@
     "Parameters": [
       {
         "Name": "dto",
-        "Type": "SportComplexAPI.Controllers.Trainer.ConcreteTrainersController\u002BAddAttendanceDto",
+        "Type": "SportComplexAPI.DTOs.Trainer.AddAttendanceDto",
         "IsRequired": true
       }
     ],
@@ -316,6 +316,22 @@
   },
   {
     "ContainingType": "SportComplexAPI.Controllers.PurchaseManager.OrdersController",
+    "Method": "AddDelivery",
+    "RelativePath": "api/Orders/add-delivery",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "SportComplexAPI.Controllers.PurchaseManager.OrdersController\u002BAddDeliveryDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.PurchaseManager.OrdersController",
     "Method": "GetBrands",
     "RelativePath": "api/Orders/all-brands",
     "HttpMethod": "GET",
@@ -324,7 +340,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[SportComplexAPI.Controllers.PurchaseManager.OrdersController\u002BBrandDto, SportComplexAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[SportComplexAPI.DTOs.PurchaseManager.BrandDto, SportComplexAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -400,7 +416,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[SportComplexAPI.Controllers.PurchaseManager.OrdersController\u002BSupplierFilltrationDto, SportComplexAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[SportComplexAPI.DTOs.PurchaseManager.SupplierDto, SportComplexAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -419,8 +435,39 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "items",
-        "Type": "System.Collections.Generic.List\u00601[[SportComplexAPI.Controllers.PurchaseManager.OrdersController\u002BOrderItemDTO, SportComplexAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Name": "dto",
+        "Type": "SportComplexAPI.Controllers.PurchaseManager.OrdersController\u002BOrderFromBasketDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.PurchaseManager.OrdersController",
+    "Method": "GetGyms",
+    "RelativePath": "api/Orders/gyms",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SportComplexAPI.Controllers.PurchaseManager.OrdersController",
+    "Method": "UpdateOrderProducts",
+    "RelativePath": "api/Orders/update-products/{orderId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dtos",
+        "Type": "System.Collections.Generic.List\u00601[[SportComplexAPI.Controllers.PurchaseManager.OrdersController\u002BUpdatePurchasedProductDto, SportComplexAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "IsRequired": true
       }
     ],
@@ -428,7 +475,7 @@
   },
   {
     "ContainingType": "SportComplexAPI.Controllers.PurchaseManager.ProductsController",
-    "Method": "CreateProduct",
+    "Method": "AddProduct",
     "RelativePath": "api/Products",
     "HttpMethod": "POST",
     "IsController": true,

@@ -75,12 +75,6 @@ D:\Univer\Sem_06\BDCourse\SportComplexAPI\obj\Debug\net8.0\scopedcss\bundle\Spor
 D:\Univer\Sem_06\BDCourse\SportComplexAPI\obj\Debug\net8.0\staticwebassets.build.json
 D:\Univer\Sem_06\BDCourse\SportComplexAPI\obj\Debug\net8.0\staticwebassets.development.json
 D:\Univer\Sem_06\BDCourse\SportComplexAPI\obj\Debug\net8.0\staticwebassets.build.endpoints.json
-D:\Univer\Sem_06\BDCourse\SportComplexAPI\obj\Debug\net8.0\staticwebassets\msbuild.SportComplexAPI.Microsoft.AspNetCore.StaticWebAssets.props
-D:\Univer\Sem_06\BDCourse\SportComplexAPI\obj\Debug\net8.0\staticwebassets\msbuild.SportComplexAPI.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
-D:\Univer\Sem_06\BDCourse\SportComplexAPI\obj\Debug\net8.0\staticwebassets\msbuild.build.SportComplexAPI.props
-D:\Univer\Sem_06\BDCourse\SportComplexAPI\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.SportComplexAPI.props
-D:\Univer\Sem_06\BDCourse\SportComplexAPI\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.SportComplexAPI.props
-D:\Univer\Sem_06\BDCourse\SportComplexAPI\obj\Debug\net8.0\staticwebassets.pack.json
 D:\Univer\Sem_06\BDCourse\SportComplexAPI\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 D:\Univer\Sem_06\BDCourse\SportComplexAPI\obj\Debug\net8.0\SportCom.2DA8B85A.Up2Date
 D:\Univer\Sem_06\BDCourse\SportComplexAPI\obj\Debug\net8.0\SportComplexAPI.dll
@@ -90,3 +84,4 @@ D:\Univer\Sem_06\BDCourse\SportComplexAPI\obj\Debug\net8.0\SportComplexAPI.genru
 D:\Univer\Sem_06\BDCourse\SportComplexAPI\obj\Debug\net8.0\ref\SportComplexAPI.dll
 D:\Univer\Sem_06\BDCourse\SportComplexAPI\bin\Debug\net8.0\AutoMapper.dll
 D:\Univer\Sem_06\BDCourse\SportComplexAPI\obj\Debug\net8.0\SportComplexAPI.sourcelink.json
+D:\Univer\Sem_06\BDCourse\SportComplexAPI\obj\Debug\net8.0\staticwebassets.build.json.cache

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SportComplexAPI.Data;
 using SportComplexAPI.Models;
 using SportComplexAPI.Services;
-using static SportComplexAPI.Controllers.PurchaseManager.OrdersController;
+using SportComplexAPI.DTOs.PurchaseManager;
 
 namespace SportComplexAPI.Controllers.PurchaseManager
 {
@@ -58,7 +58,7 @@ namespace SportComplexAPI.Controllers.PurchaseManager
                     ProductTypeId = p.product_type_id,
                     ProductTypeName = p.ProductType.product_type_name,
                     ProductModel = p.product_model,
-                    ProductDescription = p.product_description
+                    ProductDescription = p.product_description,
                 })
                 .ToListAsync();
 
