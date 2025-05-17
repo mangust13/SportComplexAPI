@@ -2370,6 +2370,14 @@
           "sportComplexId": {
             "type": "integer",
             "format": "int32"
+          },
+          "activityIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false

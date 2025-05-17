@@ -203,6 +203,7 @@ namespace SportComplexAPI.Controllers.InternalManager
             public string TrainerPhoneNumber { get; set; } = null!;
             public string Gender { get; set; } = null!;
             public int SportComplexId { get; set; }
+            public List<int> ActivityIds { get; set; } = new();
         }
 
         [HttpPut("{trainerId}")]
@@ -222,12 +223,24 @@ namespace SportComplexAPI.Controllers.InternalManager
             trainer.trainer_gender_id = gender.gender_id;
             trainer.sport_complex_id = complex.sport_complex_id;
 
+            var existing = _context.TrainerActivities.Where(ta => ta.trainer_id == trainerId);
+            _context.TrainerActivities.RemoveRange(existing);
+
+            var newActivities = dto.ActivityIds.Select(actId => new TrainerActivity
+            {
+                trainer_id = trainerId,
+                activity_id = actId
+            });
+            await _context.TrainerActivities.AddRangeAsync(newActivities);
+
             var userName = Request.Headers["X-User-Name"].FirstOrDefault() ?? "Anonymous";
             var roleName = Request.Headers["X-User-Role"].FirstOrDefault() ?? "Unknown";
             LogService.LogAction(userName, roleName, $"Змінив дані тренера (ID: {trainerId})");
+
             await _context.SaveChangesAsync();
             return Ok("Тренера оновлено");
         }
+
 
 
         //SCHEDULE
